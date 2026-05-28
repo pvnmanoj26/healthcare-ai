@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Review Schema Mapping — {{ filename }}</title>
+  <style>
+    body   { font-family:Arial,sans-serif; max-width:960px; margin:40px auto; padding:0 20px; background:#f5f7fa; }
+    h1     { color:#1a365d; }
+    h2     { color:#2c5282; }
+    .card  { background:white; border-radius:8px; padding:20px; margin:20px 0; border-left:4px solid #553c9a; }
+    table  { width:100%; border-collapse:collapse; font-size:13px; margin:16px 0; }
+    th     { background:#edf2f7; padding:12px; text-align:left; font-weight:600; }
+    td     { padding:12px; border-bottom:1px solid #e2e8f0; }
+    .btn   { color:white; padding:10px 24px; border:none; border-radius:6px; cursor:pointer; font-size:15px; margin-right:12px; font-weight:600; }
+    .btn-green  { background:#276749; } .btn-green:hover  { background:#22543d; }
+    .btn-red    { background:#c53030; } .btn-red:hover    { background:#9b2c2c; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:12px; font-size:11px; font-weight:bold; }
+    .badge-high { background:#c6f6d5; color:#22543d; }
+    .badge-low  { background:#fed7d7; color:#c53030; }
+    .sample { font-family: monospace; font-size:11px; color:#4a5568; background:#edf2f7; padding:2px 6px; border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <h1>📥 Human-in-the-Loop Mapping Approval</h1>
+  <p style="color:#4a5568;">
+    Review the AI-generated schema matches for <b>{{ filename }}</b>. 
+    Category detected: <span class="badge" style="background:#e9d8fd; color:#553c9a; font-size:13px; padding:4px 12px;">{{ category | upper }}</span>
+  </p>
+
+  <div class="card">
+    <h2>Proposed Column Mapping</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Source Column (CSV)</th>
+          <th>Mapped Target Field</th>
+          <th>Confidence</th>
+          <th>Type</th>
+          <th>Sample Values</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in mapping.mappings %}
+        <tr>
+          <td><b>{{ item.source_column }}</b></td>
+          <td>
+            {% if item.target_field %}
+              <code style="color:#553c9a; font-weight:600;">{{ item.target_field }}</code>
+            {% else %}
+              <span style="color:#a0aec0; font-style:italic;">(Ignored / Unmapped)</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if item.confidence is not none %}
+              {% set score = item.confidence | float %}
+              <span class="badge {% if score >= 0.8 %}badge-high{% else %}badge-low{% endif %}">
+                {{ (score * 100) | int }}%
+              </span>
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td><span style="color:#718096; font-size:12px;">{{ item.reason or '—' }}</span></td>
+          <td>
+            {% if item.sample_values %}
+              {% for val in item.sample_values[:3] %}
+                <span class="sample">{{ val }}</span>
+              {% endfor %}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="margin-top:24px; display:flex;">
+      <form method="post" action="/csv-ingest/confirm">
+        <input type="hidden" name="action" value="approve">
+        <button type="submit" class="btn btn-green">✅ Approve &amp; Ingest to BigQuery</button>
+      </form>
+      <form method="post" action="/csv-ingest/confirm" style="margin-left: 10px;">
+        <input type="hidden" name="action" value="reject">
+        <button type="submit" class="btn btn-red">❌ Reject &amp; Discard</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

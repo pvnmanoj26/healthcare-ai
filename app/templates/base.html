@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clinical AI Assistant</title>
+  <style>
+    body   { font-family:Arial,sans-serif; max-width:960px; margin:40px auto; padding:0 20px; background:#f5f7fa; }
+    h1     { color:#1a365d; }
+    h2     { color:#2c5282; border-bottom:2px solid #bee3f8; padding-bottom:8px; }
+    textarea         { width:100%; height:200px; padding:10px; border:1px solid #cbd5e0; border-radius:6px; font-size:14px; }
+    input[type=text] { width:100%; padding:10px; border:1px solid #cbd5e0; border-radius:6px; font-size:14px; }
+    .btn        { background:#2b6cb0; color:white; padding:10px 24px; border:none; border-radius:6px; cursor:pointer; font-size:15px; margin-right:8px; }
+    .btn:hover  { background:#2c5282; }
+    .btn-green  { background:#276749; } .btn-green:hover  { background:#22543d; }
+    .btn-purple { background:#553c9a; } .btn-purple:hover { background:#44337a; }
+    .btn-orange { background:#c05621; } .btn-orange:hover { background:#9c4221; }
+    .btn-red    { background:#c53030; } .btn-red:hover    { background:#9b2c2c; }
+    .btn-yellow { background:#b7791f; } .btn-yellow:hover { background:#975a16; }
+    .btn-sm     { padding:6px 14px; font-size:12px; }
+    .card       { background:white; border-radius:8px; padding:20px; margin:20px 0; border-left:4px solid #2b6cb0; }
+    .card-red   { border-left-color:#c53030; }
+    .card-purple{ border-left-color:#553c9a; }
+    .tag        { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:bold; margin:2px; }
+    .tag-high   { background:#fed7d7; color:#c53030; }
+    .tag-medium { background:#fefcbf; color:#744210; }
+    .tag-low    { background:#c6f6d5; color:#22543d; }
+    ul { padding-left:20px; } li { margin:6px 0; }
+    .section    { margin:12px 0; }
+    .label      { font-weight:bold; color:#4a5568; font-size:13px; text-transform:uppercase; letter-spacing:0.5px; }
+    .tabs       { display:flex; margin-bottom:20px; flex-wrap:wrap; }
+    .tab        { padding:10px 18px; cursor:pointer; border:1px solid #cbd5e0; background:#edf2f7; font-weight:500; font-size:13px; }
+    .tab.active { background:#2b6cb0; color:white; border-color:#2b6cb0; }
+    .tab:first-child { border-radius:6px 0 0 6px; }
+    .tab:last-child  { border-radius:0 6px 6px 0; }
+    .form-panel { display:none; }
+    .form-panel.active { display:block; }
+    .controls   { display:flex; gap:32px; margin-bottom:16px; background:#edf2f7; padding:14px; border-radius:8px; flex-wrap:wrap; }
+    .control-group label { font-weight:600; font-size:13px; }
+    .control-group input[type=range] { width:200px; display:block; margin:4px 0; }
+    .hint       { font-size:11px; color:#718096; }
+    .count-badge{ background:#ebf8ff; color:#2b6cb0; padding:4px 12px; border-radius:12px; font-weight:600; font-size:13px; }
+    .stat-row   { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .stat-box   { padding:12px 18px; border-radius:8px; text-align:center; min-width:80px; }
+    .stat-box .num { font-size:24px; font-weight:700; }
+    .stat-box .lbl { font-size:11px; text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    th    { background:#edf2f7; padding:10px; text-align:left; }
+    td    { padding:10px; border-bottom:1px solid #e2e8f0; }
+    .source-badge { font-size:11px; color:#718096; margin-bottom:6px; }
+    .note-text    { font-size:13px; color:#2d3748; line-height:1.6; }
+    .ingest-row   { padding:8px 0; border-bottom:1px solid #e2e8f0; font-size:13px; }
+    .banner { border:1px solid; border-radius:8px; padding:12px 16px; margin-bottom:16px; font-weight:600; }
+    .banner-green { background:#c6f6d5; border-color:#68d391; color:#22543d; }
+    .banner-red { background:#fed7d7; border-color:#fc8181; color:#9b2c2c; }
+  </style>
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.form-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      document.getElementById('panel-' + tab).classList.add('active');
+    }
+  </script>
+</head>
+<body>
+
+  <h1>🏥 Clinical AI Assistant</h1>
+  <p style="color:#718096; margin-bottom:12px;">
+    Powered by Claude + RAG · BigQuery patient store · Upstash vector search
+  </p>
+
+  <!-- STATS BAR -->
+  <div class="stat-row">
+    <div class="stat-box" style="background:#ebf8ff; color:#2b6cb0;">
+      <div class="num">{{ stats.total }}</div><div class="lbl">Patients</div>
+    </div>
+    <div class="stat-box" style="background:#fff5f5; color:#c53030;">
+      <div class="num">{{ stats.high }}</div><div class="lbl">High Risk</div>
+    </div>
+    <div class="stat-box" style="background:#fffff0; color:#b7791f;">
+      <div class="num">{{ stats.medium }}</div><div class="lbl">Medium Risk</div>
+    </div>
+    <div class="stat-box" style="background:#f0fff4; color:#276749;">
+      <div class="num">{{ stats.low }}</div><div class="lbl">Low Risk</div>
+    </div>
+    <div class="stat-box" style="background:#faf5ff; color:#553c9a;">
+      <div class="num">{{ notes_count }}</div><div class="lbl">Note Chunks</div>
+    </div>
+    <div class="stat-box" style="background:#fffaf0; color:#c05621;">
+      <div class="num">{{ guideline_count }}</div><div class="lbl">Guidelines</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab {% if active_tab == 'summarize' %}active{% endif %}" id="tab-summarize" onclick="switchTab('summarize')">📋 Summarizer</div>
+    <div class="tab {% if active_tab == 'gaps' %}active{% endif %}"      id="tab-gaps"      onclick="switchTab('gaps')">🔍 Care Gaps</div>
+    <div class="tab {% if active_tab == 'ingest' %}active{% endif %}"    id="tab-ingest"    onclick="switchTab('ingest')">📥 Ingest Notes</div>
+    <div class="tab {% if active_tab == 'csv_ingest' %}active{% endif %}" id="tab-csv_ingest" onclick="switchTab('csv_ingest')">📊 CSV Ingestion</div>
+    <div class="tab {% if active_tab == 'copilot' %}active{% endif %}"    id="tab-copilot"    onclick="switchTab('copilot')">🤖 Clinical Copilot</div>
+    <div class="tab {% if active_tab == 'search' %}active{% endif %}"    id="tab-search"    onclick="switchTab('search')">🔎 Search Notes</div>
+    <div class="tab {% if active_tab == 'patients' %}active{% endif %}"  id="tab-patients"  onclick="switchTab('patients')">🗂️ Patients</div>
+    <div class="tab {% if active_tab == 'ask' %}active{% endif %}"       id="tab-ask"       onclick="switchTab('ask')">�� Ask Notes</div>
+  </div>
+
+  <!-- ── BANNERS ────────────────────────────────────────────── -->
+  {% if csv_ingest_message %}
+    <div class="banner banner-green">{{ csv_ingest_message }}</div>
+  {% endif %}
+  {% if csv_ingest_error %}
+    <div class="banner banner-red">{{ csv_ingest_error }}</div>
+  {% endif %}
+
+  <!-- ── SUMMARIZER ─────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'summarize' %}active{% endif %}" id="panel-summarize">
+    <form method="post" action="/summarize">
+      <p style="color:#4a5568;">
+        Paste any clinical note or discharge summary.
+        Structured data is automatically saved to the patient database.
+      </p>
+      <textarea name="clinical_note" placeholder="Paste clinical note here...">{{ note_text or '' }}</textarea>
+      <br><br>
+      <div class="controls">
+        <div class="control-group">
+          <label>🌡️ Temperature: <span id="ts">0.0</span></label>
+          <input type="range" name="temperature" min="0" max="1" step="0.1" value="0.0"
+            oninput="document.getElementById('ts').textContent=this.value">
+          <div class="hint">0.0 = precise &nbsp;|&nbsp; 1.0 = creative</div>
+        </div>
+        <div class="control-group">
+          <label>📏 Max Tokens: <span id="ms">1500</span></label>
+          <input type="range" name="max_tokens" min="200" max="2000" step="100" value="1500"
+            oninput="document.getElementById('ms').textContent=this.value">
+          <div class="hint">200 = brief &nbsp;|&nbsp; 2000 = detailed</div>
+        </div>
+      </div>
+      <button type="submit" class="btn">📋 Generate Summary + Save Patient</button>
+    </form>
+    
+    {% if summary %}
+    <div class="card">
+      <h2>📋 Generated Summary</h2>
+      <p style="color:#718096; font-size:13px;">Saved as Patient ID: <b>{{ patient_id }}</b></p>
+      <div class="section"><span class="label">Primary Diagnosis:</span> {{ summary.primary_diagnosis }}</div>
+      <div class="section"><span class="label">Procedure:</span> {{ summary.procedure or '—' }}</div>
+      <div class="section">
+        <span class="label">Comorbidities:</span>
+        <ul>{% for c in summary.comorbidities %}<li>{{ c }}</li>{% endfor %}</ul>
+      </div>
+      <div class="section">
+        <span class="label">Medications:</span>
+        <ul>{% for m in summary.medications %}<li>{{ m }}</li>{% endfor %}</ul>
+      </div>
+      <div class="section">
+        <span class="label">Key Findings:</span>
+        <ul>{% for f in summary.key_findings %}<li>{{ f }}</li>{% endfor %}</ul>
+      </div>
+      <div class="section">
+        <span class="label">Risk Flags:</span>
+        {% for r in summary.risk_flags %}
+          <span class="tag tag-high">⚠️ {{ r }}</span>
+        {% else %}
+          <span style="color:#276749;">✅ No risk flags detected</span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if out_of_scope_reason %}
+    <div class="card card-red">
+      <h2>⚠️ Summary Rejected</h2>
+      <p style="color:#c53030;">{{ out_of_scope_reason }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── CARE GAPS ───────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'gaps' %}active{% endif %}" id="panel-gaps">
+    <form method="post" action="/caregaps">
+      <p style="color:#4a5568;">
+        Paste a patient's clinical note. Checked against {{ guideline_count }} embedded clinical guidelines.
+      </p>
+      <textarea name="clinical_note" placeholder="Paste patient clinical note here...">{{ note_text or '' }}</textarea>
+      <br><br>
+      <button type="submit" class="btn btn-green">🔍 Identify Care Gaps</button>
+    </form>
+    
+    {% if gaps %}
+    <div class="card card-purple">
+      <h2>🔍 Clinical Care Gaps</h2>
+      {% for gap in gaps.gaps %}
+      <div style="margin:16px 0; padding:12px; background:#faf5ff; border-radius:6px; border-left:3px solid #553c9a;">
+        <span class="tag {% if gap.priority == 'HIGH' %}tag-high{% elif gap.priority == 'MEDIUM' %}tag-medium{% else %}tag-low{% endif %}">
+          {{ gap.priority }} Priority
+        </span>
+        <div style="margin-top:6px;"><b>Gap:</b> {{ gap.gap }}</div>
+        <div><b>Based on Guideline:</b> <i>{{ gap.guideline }}</i></div>
+        <div style="color:#2d3748; margin-top:4px;"><b>Recommendation:</b> {{ gap.recommendation }}</div>
+      </div>
+      {% endfor %}
+      <div style="margin-top:16px; border-top:1px solid #e2e8f0; padding-top:12px;">
+        <h3>Synthesis / Summary</h3>
+        <p style="font-size:14px; line-height:1.6;">{{ gaps.summary }}</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── INGEST ──────────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'ingest' %}active{% endif %}" id="panel-ingest">
+    <form method="post" action="/ingest">
+      <p style="color:#4a5568;">
+        Paste one or more URLs — one per line. Works with MTSamples or any page with clinical text.<br>
+      </p>
+      <textarea name="urls" placeholder="https://mtsamples.com/..."></textarea>
+      <br><br>
+      <div style="margin-bottom:16px; padding:12px; background:#edf2f7; border-radius:8px; display:flex; align-items:center; gap:10px;">
+        <input type="checkbox" name="auto_summarize" id="auto_summarize" style="width:16px; height:16px;">
+        <label for="auto_summarize" style="font-size:14px; font-weight:500; cursor:pointer;">
+          🤖 Auto-summarize &amp; create patient records
+        </label>
+      </div>
+      <button type="submit" class="btn btn-purple">📥 Scrape &amp; Index Notes</button>
+    </form>
+    
+    {% if ingest_results %}
+    <div class="card card-purple" style="margin-top:20px;">
+      <h2>📥 Ingest Results</h2>
+      {% for r in ingest_results %}
+      <div class="ingest-row">
+        {% if r.success %}
+          ✅ <b>{{ r.url[:70] }}</b> — {{ r.chunks }} chunks indexed
+          {% if r.patient_id %}
+            | 🧑⚕️ <a href="/patient/{{ r.patient_id }}" style="color:#553c9a;">Patient {{ r.patient_id }}</a>
+          {% endif %}
+        {% else %}
+          ❌ <b>{{ r.url[:70] }}</b> — {{ r.error or 'Failed' }}
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── CSV INGESTION ────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'csv_ingest' %}active{% endif %}" id="panel-csv_ingest">
+    <form method="post" action="/csv-ingest/upload" enctype="multipart/form-data">
+      <h2>📊 Ingest CSV Datasets</h2>
+      <p style="color:#4a5568; margin-bottom:18px;">
+        Upload CSV files (like demographics <code>patients.csv</code> or event-based <code>conditions.csv</code>). 
+        The system will auto-detect the category, suggest AI column mappings, and wait for your approval before inserting records into BigQuery.
+      </p>
+      
+      <div style="background:white; border:2px dashed #cbd5e0; border-radius:8px; padding:32px; text-align:center; margin-bottom:20px;">
+        <input type="file" name="csv_file" accept=".csv" required style="font-size:15px; margin-bottom:12px;"><br>
+        <span class="hint">Upload file format: CSV (.csv) only</span>
+      </div>
+
+      <button type="submit" class="btn btn-purple">Upload &amp; Propose Mapping</button>
+    </form>
+  </div>
+
+  <!-- ── COPILOT ────────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'copilot' %}active{% endif %}" id="panel-copilot">
+    <form method="post" action="/copilot">
+      <h2>🤖 Clinical Copilot (AI Agent Orchestrator)</h2>
+      <p style="color:#4a5568; margin-bottom:18px;">
+        Chat with the clinical orchestrator. You can ask analytical questions (e.g. <i>"How many patients have high risk level?"</i>), 
+        request care gap analysis, search notes, or upload and ask it to ingest files.
+      </p>
+      <input type="text" name="message" placeholder="Ask the Copilot anything..." value="{{ copilot_query or '' }}">
+      <br><br>
+      <button type="submit" class="btn btn-purple">Send to Copilot</button>
+    </form>
+    
+    {% if copilot_response %}
+    <div class="card card-purple" style="margin-top:20px;">
+      <h2>🤖 Copilot Response</h2>
+      <div style="font-size:14px; color:#2d3748; line-height:1.8; white-space:pre-wrap;">{{ copilot_response }}</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── SEARCH ──────────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'search' %}active{% endif %}" id="panel-search">
+    <form method="post" action="/search">
+      <p style="color:#4a5568;">Semantic search across all indexed notes.</p>
+      <input type="text" name="query" placeholder="e.g. patients with uncontrolled diabetes" value="{{ search_query or '' }}">
+      <br><br>
+      <button type="submit" class="btn btn-orange">🔎 Search</button>
+    </form>
+    
+    {% if search_results %}
+    <div class="card" style="margin-top:20px;">
+      <h2>🔎 Search Results</h2>
+      {% for doc, meta in search_results %}
+      <div style="margin:16px 0; padding:14px; background:#f7fafc; border-radius:6px; border-left:3px solid #2b6cb0;">
+        <div class="source-badge">
+          Source: {{ meta.url }}
+          {% if meta.patient_id %} | Patient: <a href="/patient/{{ meta.patient_id }}" style="color:#2b6cb0;">{{ meta.patient_id }}</a>{% endif %}
+        </div>
+        <div class="note-text">{{ doc }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── ASK ─────────────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'ask' %}active{% endif %}" id="panel-ask">
+    <form method="post" action="/ask">
+      <input type="text" name="question" placeholder="Ask anything about your clinical notes..." value="{{ ask_question or '' }}">
+      <br><br>
+      <button type="submit" class="btn" style="background:#0d6efd;">💬 Ask</button>
+    </form>
+
+    {% if ask_answer %}
+    <div class="card" style="margin-top:20px; border-left-color:#0d6efd;">
+      <h2>💬 Answer</h2>
+      <div style="font-size:14px; color:#2d3748; line-height:1.8; white-space:pre-wrap;">{{ ask_answer }}</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ── PATIENTS ────────────────────────────────────────────── -->
+  <div class="form-panel {% if active_tab == 'patients' %}active{% endif %}" id="panel-patients">
+    <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;">
+      <a href="/patients" style="text-decoration:none;"><button class="btn btn-sm">All</button></a>
+      <a href="/patients?risk=HIGH" style="text-decoration:none;"><button class="btn btn-sm btn-red">High Risk</button></a>
+      <a href="/patients?risk=MEDIUM" style="text-decoration:none;"><button class="btn btn-sm btn-yellow">Medium Risk</button></a>
+      <a href="/patients?risk=LOW" style="text-decoration:none;"><button class="btn btn-sm btn-green">Low Risk</button></a>
+    </div>
+    
+    {% if patients %}
+    <div class="card">
+      <h2>🗂️ Patient Records</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Patient ID</th><th>Primary Diagnosis</th><th>Procedure</th><th>Risk Flags</th><th>Risk Level</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in patients %}
+          <tr>
+            <td style="font-weight:600; color:#2b6cb0;">{{ p.patient_id }}</td>
+            <td>{{ p.primary_diagnosis[:55] }}</td>
+            <td>{{ p.procedure or '—' }}</td>
+            <td>
+              {% set flags = p.risk_flags | fromjson %}
+              {% for f in flags %}<span class="tag tag-high" style="font-size:10px;">{{ f[:25] }}</span>{% endfor %}
+            </td>
+            <td>
+              <span class="tag {% if p.risk_level == 'HIGH' %}tag-high{% elif p.risk_level == 'MEDIUM' %}tag-medium{% else %}tag-low{% endif %}">
+                {{ p.risk_level }}
+              </span>
+            </td>
+            <td><a href="/patient/{{ p.patient_id }}"><button class="btn btn-sm btn-purple" style="padding:4px 10px;">Details</button></a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Patient Details — {{ patient.patient_id }}</title>
+  <style>
+    body   { font-family:Arial,sans-serif; max-width:960px; margin:40px auto; padding:0 20px; background:#f5f7fa; }
+    h1     { color:#1a365d; }
+    h2     { color:#2c5282; border-bottom:2px solid #bee3f8; padding-bottom:8px; }
+    .card  { background:white; border-radius:8px; padding:20px; margin:20px 0; border-left:4px solid #553c9a; }
+    .card-red { border-left-color:#c53030; }
+    .card-yellow { border-left-color:#b7791f; }
+    .card-green { border-left-color:#276749; }
+    .btn   { display:inline-block; background:#2b6cb0; color:white; padding:10px 24px; border:none; border-radius:6px; cursor:pointer; font-size:15px; text-decoration:none; font-weight:600; }
+    .btn:hover { background:#2c5282; }
+    .tag   { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:bold; margin:2px; }
+    .tag-high   { background:#fed7d7; color:#c53030; }
+    .tag-medium { background:#fefcbf; color:#744210; }
+    .tag-low    { background:#c6f6d5; color:#22543d; }
+    .section { margin:16px 0; }
+    .label { font-weight:bold; color:#4a5568; font-size:13px; text-transform:uppercase; letter-spacing:0.5px; display:block; margin-bottom:4px; }
+    pre { background:#edf2f7; padding:16px; border-radius:6px; overflow-x:auto; font-family:monospace; font-size:13px; white-space:pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <div style="margin-top:20px;">
+    <a href="/patients" class="btn">⬅️ Back to Patient Directory</a>
+  </div>
+
+  <div class="card {% if patient.risk_level == 'HIGH' %}card-red{% elif patient.risk_level == 'MEDIUM' %}card-yellow{% else %}card-green{% endif %}">
+    <h1>🧑‍⚕️ Patient ID: {{ patient.patient_id }}</h1>
+    <div style="margin-bottom:20px;">
+      <span class="tag {% if patient.risk_level == 'HIGH' %}tag-high{% elif patient.risk_level == 'MEDIUM' %}tag-medium{% else %}tag-low{% endif %}">
+        {{ patient.risk_level }} RISK LEVEL
+      </span>
+      <span style="color:#718096; font-size:13px; margin-left:12px;">Created: {{ patient.created_at }}</span>
+    </div>
+
+    <div class="section">
+      <span class="label">Primary Diagnosis</span>
+      <p style="font-size:16px; font-weight:600; margin:0; color:#2d3748;">{{ patient.primary_diagnosis or '—' }}</p>
+    </div>
+
+    <div class="section">
+      <span class="label">Procedure</span>
+      <p style="font-size:15px; margin:0; color:#2d3748;">{{ patient.procedure or '—' }}</p>
+    </div>
+
+    <div class="section">
+      <span class="label">Comorbidities</span>
+      <ul style="margin:4px 0; padding-left:20px;">
+        {% for c in patient.comorbidities %}
+          <li>{{ c }}</li>
+        {% else %}
+          <li style="color:#718096; list-style:none; margin-left:-20px;">None documented</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <span class="label">Medications</span>
+      <ul style="margin:4px 0; padding-left:20px;">
+        {% for m in patient.medications %}
+          <li>{{ m }}</li>
+        {% else %}
+          <li style="color:#718096; list-style:none; margin-left:-20px;">None documented</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <span class="label">Key Findings</span>
+      <ul style="margin:4px 0; padding-left:20px;">
+        {% for f in patient.key_findings %}
+          <li>{{ f }}</li>
+        {% else %}
+          <li style="color:#718096; list-style:none; margin-left:-20px;">None documented</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <span class="label">Risk Flags</span>
+      {% for r in patient.risk_flags %}
+        <span class="tag tag-high">⚠️ {{ r }}</span>
+      {% else %}
+        <span style="color:#276749; font-weight:600;">✅ No risk flags detected</span>
+      {% endfor %}
+    </div>
+
+    <div class="section">
+      <span class="label">Follow-Up Actions</span>
+      <ul style="margin:4px 0; padding-left:20px;">
+        {% for a in patient.follow_up_actions %}
+          <li>{{ a }}</li>
+        {% else %}
+          <li style="color:#718096; list-style:none; margin-left:-20px;">None documented</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section" style="margin-top:32px;">
+      <span class="label">Raw Clinical Note / Source Text</span>
+      <pre>{{ patient.source_note or '—' }}</pre>
+    </div>
+  </div>
+
+</body>
+</html>

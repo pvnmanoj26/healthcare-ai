@@ -1,6 +1,8 @@
 from models.base import CsvRow
 from models.events import ClinicalEvent
 from models.patient import PatientDemographics, ClinicalPatientRecord, Gender, RiskLevel
+from models.clinical_summary import ClinicalSummary
+from models.care_gap import CareGap, CareGapResult
 from models.ingestion import (
     ColumnProfile,
     PatientRow,
@@ -30,6 +32,9 @@ __all__ = [
     "ClinicalPatientRecord",
     "Gender",
     "RiskLevel",
+    "ClinicalSummary",
+    "CareGap",
+    "CareGapResult",
     "ColumnProfile",
     "PatientRow",
     "EncounterRow",
