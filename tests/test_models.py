@@ -15,12 +15,12 @@ def test_patient_demographics():
 
 def test_clinical_event():
     event = ClinicalEvent(
-        patient_id="123",
-        event_type="conditions",
-        event_date="2026-05-28",
-        description="Type 2 Diabetes"
+        source_file="conditions.csv",
+        description="Type 2 Diabetes",
+        code="E11.9",
+        status="active"
     )
-    assert event.event_type == "conditions"
+    assert event.source_file == "conditions.csv"
     assert event.description == "Type 2 Diabetes"
     print("test_clinical_event passed!")
 
