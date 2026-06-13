@@ -4,6 +4,7 @@ from adapters.anthropic import get_claude_response
 from adapters.bigquery import (
     write_demographics_to_bigquery,
     write_events_to_bigquery,
+    write_care_gap_workflow_to_bigquery,
     run_bigquery_query,
 )
 
@@ -15,5 +16,6 @@ __all__ = [
     "get_claude_response",
     "write_demographics_to_bigquery",
     "write_events_to_bigquery",
+    "write_care_gap_workflow_to_bigquery",
     "run_bigquery_query",
 ]

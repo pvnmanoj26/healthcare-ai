@@ -94,6 +94,7 @@
   <div class="tabs">
     <div class="tab {% if active_tab == 'summarize' %}active{% endif %}" id="tab-summarize" onclick="switchTab('summarize')">📋 Summarizer</div>
     <div class="tab {% if active_tab == 'gaps' %}active{% endif %}"      id="tab-gaps"      onclick="switchTab('gaps')">🔍 Care Gaps</div>
+    <div class="tab {% if active_tab == 'langgraph' %}active{% endif %}" id="tab-langgraph" onclick="switchTab('langgraph')">LangGraph Care Gaps</div>
     <div class="tab {% if active_tab == 'ingest' %}active{% endif %}"    id="tab-ingest"    onclick="switchTab('ingest')">📥 Ingest Notes</div>
     <div class="tab {% if active_tab == 'csv_ingest' %}active{% endif %}" id="tab-csv_ingest" onclick="switchTab('csv_ingest')">📊 CSV Ingestion</div>
     <div class="tab {% if active_tab == 'copilot' %}active{% endif %}"    id="tab-copilot"    onclick="switchTab('copilot')">🤖 Clinical Copilot</div>
@@ -169,6 +170,97 @@
     <div class="card card-red">
       <h2>⚠️ Summary Rejected</h2>
       <p style="color:#c53030;">{{ out_of_scope_reason }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- LANGGRAPH CARE GAPS -->
+  <div class="form-panel {% if active_tab == 'langgraph' %}active{% endif %}" id="panel-langgraph">
+    <form id="langgraph-form" method="post" action="/langgraph/start">
+      <h2>LangGraph Care Gap Workflow</h2>
+      <p style="color:#4a5568;">
+        Run risk triage and condition-specific guideline checks, then pause for clinician approval.
+      </p>
+      <textarea name="patient_note" placeholder="Paste patient clinical note here...">{{ note_text or '' }}</textarea>
+      <br><br>
+      <button type="submit" class="btn btn-purple">Start Workflow</button>
+      <a href="/langgraph/pending" style="text-decoration:none;"><button type="button" class="btn">Pending Reviews</button></a>
+    </form>
+    <script>
+    document.getElementById('langgraph-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const note = document.querySelector('#langgraph-form textarea[name="patient_note"]').value;
+      try {
+        const resp = await fetch('/langgraph/start', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({patient_note: note})
+        });
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        alert('Workflow started! Redirecting to pending reviews...');
+        window.location.href = '/langgraph/pending?workflow_id=' + data.workflow_id;
+      } catch (err) {
+        alert('Error: ' + err.message);
+        console.error(err);
+      }
+    });
+    </script>
+
+    {% if langgraph_error %}
+    <div class="banner banner-red" style="margin-top:16px;">{{ langgraph_error }}</div>
+    {% endif %}
+
+    {% if langgraph_pending %}
+    <div class="card">
+      <h2>Pending Reviews</h2>
+      {% for workflow in langgraph_pending %}
+      <div style="padding:10px 0; border-bottom:1px solid #e2e8f0;">
+        <a href="/langgraph/pending?workflow_id={{ workflow.workflow_id }}">{{ workflow.workflow_id }}</a>
+        <span class="tag tag-medium">{{ workflow.risk_level }}</span>
+        {{ workflow.summary.primary_diagnosis }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if langgraph_workflow %}
+    <div class="card card-purple">
+      <h2>Workflow {{ langgraph_workflow.workflow_id }}</h2>
+      <div class="section"><span class="label">Status:</span> {{ langgraph_workflow.status }}</div>
+      <div class="section"><span class="label">Risk:</span> {{ langgraph_workflow.risk_level or 'Pending' }}</div>
+      {% if langgraph_workflow.detected_conditions %}
+      <div class="section"><span class="label">Pathways:</span> {{ langgraph_workflow.detected_conditions | join(', ') }}</div>
+      {% endif %}
+
+      {% if langgraph_workflow.status == 'pending_approval' %}
+      <form method="post" action="/langgraph/approve">
+        <input type="hidden" name="workflow_id" value="{{ langgraph_workflow.workflow_id }}">
+        <p>Select the gaps approved for action. Unselected gaps will be recorded as rejected.</p>
+        {% for gap in langgraph_workflow.draft_gaps %}
+        <label style="display:block; margin:14px 0; padding:12px; background:#faf5ff; border-radius:6px;">
+          <input type="checkbox" name="approved_indexes" value="{{ loop.index0 }}">
+          <span class="tag {% if gap.priority == 'HIGH' %}tag-high{% elif gap.priority == 'MEDIUM' %}tag-medium{% else %}tag-low{% endif %}">{{ gap.priority }}</span>
+          <b>{{ gap.gap }}</b><br>
+          <span style="margin-left:24px; color:#4a5568;">{{ gap.recommendation }}</span>
+        </label>
+        {% else %}
+        <p>No actionable gaps were detected.</p>
+        {% endfor %}
+        <button type="submit" class="btn btn-green">Submit Clinical Decision</button>
+      </form>
+      {% elif langgraph_workflow.status in ['complete', 'rejected'] %}
+        <div class="banner {% if langgraph_workflow.status == 'complete' %}banner-green{% else %}banner-red{% endif %}">
+          Workflow {{ langgraph_workflow.status }} and stored.
+        </div>
+        {% if langgraph_workflow.action_plan %}
+        <h3>Action Plan</h3>
+        {% for category, actions in langgraph_workflow.action_plan.items() %}
+          <div class="section"><span class="label">{{ category | replace('_', ' ') }}:</span></div>
+          <ul>{% for action in actions %}<li>{{ action }}</li>{% endfor %}</ul>
+        {% endfor %}
+        {% endif %}
+      {% endif %}
     </div>
     {% endif %}
   </div>

@@ -20,6 +20,9 @@ def base_context(**kwargs):
         ask_question=None,
         ask_answer=None,
         ask_sources=None,
+        langgraph_workflow=None,
+        langgraph_pending=[],
+        langgraph_error=None,
     )
     defaults.update(kwargs)
     return defaults

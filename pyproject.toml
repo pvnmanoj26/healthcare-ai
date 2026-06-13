@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "healthcare-ai"
+version = "0.1.0"
+description = "Healthcare AI clinical application"
+requires-python = ">=3.9"
+
+[tool.setuptools]
+packages = ["adapters", "agents", "api", "app", "config", "models", "runners", "services", "tools", "tests"]

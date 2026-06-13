@@ -193,3 +193,43 @@ def run_bigquery_query(sql: str, project_id: str | None = None) -> dict[str, Any
         return {"rows": rows, "count": len(rows)}
     except Exception as e:
         return {"error": str(e)}
+
+def write_care_gap_workflow_to_bigquery(
+    record: dict[str, Any],
+    project_id: str | None = None,
+    dataset_id: str | None = None,
+    table_id: str = "care_gap_workflows",
+) -> dict[str, Any]:
+    """Append a completed LangGraph care-gap workflow to BigQuery."""
+    proj = project_id or GCP_PROJECT_ID or "healthcare-ai-manoj"
+    dataset = dataset_id or BIGQUERY_DATASET or "healthcare_ai"
+    table_ref = f"{proj}.{dataset}.{table_id}"
+    client = get_client(proj)
+    schema = [
+        bigquery.SchemaField("workflow_id", "STRING", mode="REQUIRED"),
+        bigquery.SchemaField("patient_note", "STRING"),
+        bigquery.SchemaField("summary", "JSON"),
+        bigquery.SchemaField("risk_level", "STRING"),
+        bigquery.SchemaField("detected_conditions", "JSON"),
+        bigquery.SchemaField("approved_gaps", "JSON"),
+        bigquery.SchemaField("rejected_gaps", "JSON"),
+        bigquery.SchemaField("action_plan", "JSON"),
+        bigquery.SchemaField("status", "STRING"),
+        bigquery.SchemaField("completed_at", "TIMESTAMP"),
+    ]
+    client.create_table(bigquery.Table(table_ref, schema=schema), exists_ok=True)
+
+    row = {
+        "workflow_id": record.get("workflow_id", ""),
+        "patient_note": record.get("patient_note", ""),
+        "summary": record.get("summary", {}),
+        "risk_level": record.get("risk_level", ""),
+        "detected_conditions": record.get("detected_conditions", []),
+        "approved_gaps": record.get("approved_gaps", []),
+        "rejected_gaps": record.get("rejected_gaps", []),
+        "action_plan": record.get("action_plan", {}),
+        "status": record.get("status", "complete"),
+        "completed_at": datetime.utcnow().isoformat(),
+    }
+    errors = client.insert_rows_json(table_ref, [row])
+    return {"table": table_ref, "rows_attempted": 1, "errors": errors}

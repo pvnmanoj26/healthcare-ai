@@ -1,0 +1,30 @@
+.gcloudignore
+.git
+.gitignore
+.env
+.env.example
+.venv
+venv
+env
+data/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.pytest_cache/
+tests/
+INNER_EOF
+setup_tests.sh
+setup_runners.sh
+setup_deploy.sh
+deploy.sh
+# requirements.txt
+clinical_app.py
+clinical_agent.py
+test_ingest.py
+adk_agents/
+healthcare-ai-roadmap.html
+# Dockerfile
+*.db
+*.sqlite3

@@ -167,21 +167,64 @@ def retrieve_relevant_guidelines(query: str, summary: dict | None = None, k: int
 
 def clean_json(text: str) -> str:
     text = text.strip()
-    text = re.sub(r"^```json\s*", "", text)
-    text = re.sub(r"^```\s*", "", text)
-    text = re.sub(r"\s*```$", "", text)
+    text = re.sub(r"^```(?:json)?\s*\n?", "", text)
+    text = re.sub(r"\n?\s*```$", "", text)
+    text = text.strip()
+    if not text:
+        raise ValueError("Empty response after cleaning")
+
+    if not text.startswith("{") and not text.startswith("["):
+        lines = text.split("\n")
+        for i, line in enumerate(lines):
+            if line.strip().startswith("{") or line.strip().startswith("["):
+                text = "\n".join(lines[i:])
+                break
+
+    text = text.strip()
+    brace_count = 0
+    bracket_count = 0
+    in_string = False
+    escape_next = False
+
+    for i, char in enumerate(text):
+        if escape_next:
+            escape_next = False
+            continue
+        if char == "\\" and in_string:
+            escape_next = True
+            continue
+        if char == '"' and not escape_next:
+            in_string = not in_string
+            continue
+        if not in_string:
+            if char == "{":
+                brace_count += 1
+            elif char == "}":
+                brace_count -= 1
+                if brace_count == 0 and bracket_count == 0:
+                    return text[:i+1]
+            elif char == "[":
+                bracket_count += 1
+            elif char == "]":
+                bracket_count -= 1
+                if brace_count == 0 and bracket_count == 0:
+                    return text[:i+1]
+
     return text.strip()
 
 def generate_clinical_summary(note: str, temperature: float = 0.0, max_tokens: int = 1500) -> ClinicalSummary:
     system_prompt = (
-        "You are an expert clinical summariser. Output valid, parsed JSON matching this structure: "
-        '{"out_of_scope": bool, "reason": str or null, "primary_diagnosis": str, "procedure": str, '
-        '"comorbidities": [str], "medications": [str], "key_findings": [str], "risk_flags": [str], "follow_up_actions": [str]}. '
+        "You are an expert clinical summariser. Output ONLY valid JSON (no markdown, no extra text) matching this structure: "
+        '{"out_of_scope": bool, "reason": null, "primary_diagnosis": "string", "procedure": "string or null", '
+        '"comorbidities": ["string"], "medications": ["string"], "key_findings": ["string"], "risk_flags": ["string"], "follow_up_actions": ["string"]}. '
         "Extract only facts present in the note. Do not list symptoms as comorbidities. Do not list surgical supplies as medications."
     )
     raw_json = get_claude_response(system_prompt, note, max_tokens=max_tokens, temperature=temperature)
     cleaned = clean_json(raw_json)
-    summary_dict = json.loads(cleaned)
+    try:
+        summary_dict = json.loads(cleaned)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Failed to parse clinical summary JSON. Raw: {raw_json[:300]}... Error: {str(e)}") from e
     return ClinicalSummary(**summary_dict)
 
 def analyze_care_gaps(note: str, temperature: float = 0.0, max_tokens: int = 1500) -> CareGapResult:

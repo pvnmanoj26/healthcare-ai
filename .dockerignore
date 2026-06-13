@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Environment files (secrets must NOT go in the image)
+.env
+*.env
+
+# Dev / editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Test files
+test_*.py
+*_test.py
+
+# Local logs
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Notebooks
+*.ipynb
+
+# Roadmap / docs not needed in container
+*.html

@@ -13,14 +13,15 @@ echo "   Service : ${SERVICE_NAME}"
 echo ""
 
 # Build and push using Cloud Build
+cp deploy/Dockerfile.api Dockerfile
 gcloud builds submit \
   --tag ${IMAGE} \
   --project=${PROJECT_ID} \
-  --file=deploy/Dockerfile.api \
   .
+rm -f Dockerfile
 
 # Deploy to Cloud Run
-gcloud run deploy ${SERVICE_NAME} \
+gcloud beta run deploy ${SERVICE_NAME} \
   --image ${IMAGE} \
   --platform managed \
   --region ${REGION} \
@@ -32,7 +33,6 @@ gcloud run deploy ${SERVICE_NAME} \
   --concurrency 10 \
   --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,UPSTASH_VECTOR_REST_URL=UPSTASH_VECTOR_REST_URL:latest,UPSTASH_VECTOR_REST_TOKEN=UPSTASH_VECTOR_REST_TOKEN:latest" \
   --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BIGQUERY_DATASET=healthcare_ai" \
-  --service-account="clinical-ai-sa@${PROJECT_ID}.iam.gserviceaccount.com" \
   --project=${PROJECT_ID}
 
 echo "✅ API deployment complete!"

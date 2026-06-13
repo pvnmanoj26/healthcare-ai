@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Healthcare AI Engineer Roadmap — Manoj Potharlanka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --primary:#053BEE;--primary-dark:#032CB8;--primary-light:#E8EDFF;--primary-subtle:#F2F5FF;
+  --accent:#EB5324;
+  --ink:#000A1B;--ink-2:#1A1F2E;--ink-muted:#666666;--ink-faint:#999999;
+  --rule:#CCCCCC;--surface:#F5F7FA;--white:#FFFFFF;--dark-bg-text:#F2F5FF;
+  --green:#05604F;--green-light:#EDFAF4;--green-mid:#2DBD74;
+  --font-body:'DM Sans',sans-serif;--font-display:'Lora',serif;
+  /* phase colours */
+  --p1:#2563EB;--p1-light:#EFF6FF;--p1-border:#BFDBFE;--p1-badge:#DBEAFE;--p1-badge-text:#1E40AF;
+  --p2:#7C3AED;--p2-light:#F5F3FF;--p2-border:#DDD6FE;--p2-badge:#EDE9FE;--p2-badge-text:#5B21B6;
+  --p3:#16A34A;--p3-light:#F0FDF4;--p3-border:#BBF7D0;--p3-badge:#DCFCE7;--p3-badge-text:#166534;
+  --p4:#EA580C;--p4-light:#FFF7ED;--p4-border:#FED7AA;--p4-badge:#FFEDD5;--p4-badge-text:#9A3412;
+  --p5:#DC2626;--p5-light:#FFF5F5;--p5-border:#FECACA;--p5-badge:#FEE2E2;--p5-badge-text:#991B1B;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);background:var(--white);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+/* NAV */
+nav{position:sticky;top:0;background:var(--ink-2);border-bottom:1px solid rgba(255,255,255,0.08);z-index:100;padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:52px;gap:16px;flex-wrap:wrap;}
+.nav-title{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;}
+.nav-links{display:flex;gap:8px;list-style:none;flex-wrap:wrap;}
+.nav-links a{text-decoration:none;font-size:12px;font-weight:500;color:rgba(255,255,255,0.55);padding:4px 10px;border-radius:6px;transition:color 0.15s,background 0.15s;}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,0.1);}
+
+/* COVER */
+.cover{background:var(--primary);position:relative;overflow:hidden;}
+.cover::before{content:'';position:absolute;top:-60px;right:-80px;width:480px;height:480px;border-radius:50%;border:1px solid rgba(255,255,255,0.08);}
+.cover::after{content:'';position:absolute;bottom:-100px;right:80px;width:320px;height:320px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);}
+.cover-inner{max-width:1100px;margin:0 auto;padding:80px 48px 64px;position:relative;z-index:1;}
+.cover-label{font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:20px;}
+.cover h1{font-family:var(--font-display);font-size:clamp(38px,6vw,72px);line-height:1.05;color:#fff;letter-spacing:-0.02em;max-width:700px;margin-bottom:20px;}
+.cover-sub{font-size:17px;color:rgba(255,255,255,0.75);max-width:520px;line-height:1.6;margin-bottom:36px;}
+.cover-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.cover-stat{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 18px;}
+.cover-stat label{display:block;font-size:11px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:2px;}
+.cover-stat span{font-size:16px;font-weight:600;color:#fff;}
+
+/* PHASE TABS */
+.phase-tabs{background:var(--white);border-bottom:1px solid var(--rule);padding:16px 48px;display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:52px;z-index:90;}
+.phase-tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all 0.15s;background:none;}
+.phase-tab[data-phase="1"]{color:var(--p1);border-color:var(--p1-border);background:var(--p1-light);}
+.phase-tab[data-phase="1"].active{background:var(--p1);color:#fff;border-color:var(--p1);}
+.phase-tab[data-phase="2"]{color:var(--p2);border-color:var(--p2-border);background:var(--p2-light);}
+.phase-tab[data-phase="2"].active{background:var(--p2);color:#fff;border-color:var(--p2);}
+.phase-tab[data-phase="3"]{color:var(--p3);border-color:var(--p3-border);background:var(--p3-light);}
+.phase-tab[data-phase="3"].active{background:var(--p3);color:#fff;border-color:var(--p3);}
+.phase-tab[data-phase="4"]{color:var(--p4);border-color:var(--p4-border);background:var(--p4-light);}
+.phase-tab[data-phase="4"].active{background:var(--p4);color:#fff;border-color:var(--p4);}
+.phase-tab[data-phase="5"]{color:var(--p5);border-color:var(--p5-border);background:var(--p5-light);}
+.phase-tab[data-phase="5"].active{background:var(--p5);color:#fff;border-color:var(--p5);}
+
+/* PHASE PANELS */
+.phase-panel{display:none;max-width:860px;margin:0 auto;padding:32px 48px 64px;}
+.phase-panel.active{display:block;}
+.phase-header{border-radius:14px;padding:24px 28px;margin-bottom:24px;}
+.phase-header[data-phase="1"]{background:var(--p1-light);border:2px solid var(--p1-border);}
+.phase-header[data-phase="2"]{background:var(--p2-light);border:2px solid var(--p2-border);}
+.phase-header[data-phase="3"]{background:var(--p3-light);border:2px solid var(--p3-border);}
+.phase-header[data-phase="4"]{background:var(--p4-light);border:2px solid var(--p4-border);}
+.phase-header[data-phase="5"]{background:var(--p5-light);border:2px solid var(--p5-border);}
+.phase-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.phase-header[data-phase="1"] .phase-badge{background:var(--p1-badge);color:var(--p1-badge-text);}
+.phase-header[data-phase="2"] .phase-badge{background:var(--p2-badge);color:var(--p2-badge-text);}
+.phase-header[data-phase="3"] .phase-badge{background:var(--p3-badge);color:var(--p3-badge-text);}
+.phase-header[data-phase="4"] .phase-badge{background:var(--p4-badge);color:var(--p4-badge-text);}
+.phase-header[data-phase="5"] .phase-badge{background:var(--p5-badge);color:var(--p5-badge-text);}
+.phase-header h2{font-family:var(--font-display);font-size:22px;font-weight:700;margin-bottom:4px;}
+.phase-header[data-phase="1"] h2{color:var(--p1);}
+.phase-header[data-phase="2"] h2{color:var(--p2);}
+.phase-header[data-phase="3"] h2{color:var(--p3);}
+.phase-header[data-phase="4"] h2{color:var(--p4);}
+.phase-header[data-phase="5"] h2{color:var(--p5);}
+.phase-header p{font-size:14px;color:var(--ink-muted);margin-bottom:14px;}
+.build-target{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:14px 18px;}
+.build-target-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--ink-faint);margin-bottom:4px;}
+.build-target-text{font-size:14px;font-weight:600;color:var(--ink);}
+
+/* WEEK CARDS */
+.week-list{display:flex;flex-direction:column;gap:10px;}
+.week-card{background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden;}
+.week-card.milestone{border-width:2px;}
+.week-card.milestone[data-phase="1"]{border-color:var(--p1-border);}
+.week-card.milestone[data-phase="2"]{border-color:var(--p2-border);}
+.week-card.milestone[data-phase="3"]{border-color:var(--p3-border);}
+.week-card.milestone[data-phase="4"]{border-color:var(--p4-border);}
+.week-card.milestone[data-phase="5"]{border-color:var(--p5-border);}
+.week-header{width:100%;padding:14px 18px;display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;text-align:left;}
+.week-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:#E2E8F0;color:#64748B;}
+.week-card.milestone[data-phase="1"] .week-num{background:var(--p1);color:#fff;}
+.week-card.milestone[data-phase="2"] .week-num{background:var(--p2);color:#fff;}
+.week-card.milestone[data-phase="3"] .week-num{background:var(--p3);color:#fff;}
+.week-card.milestone[data-phase="4"] .week-num{background:var(--p4);color:#fff;}
+.week-card.milestone[data-phase="5"] .week-num{background:var(--p5);color:#fff;}
+.week-title-wrap{flex:1;}
+.week-title{font-size:14px;font-weight:600;color:var(--ink);}
+.milestone-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px;margin-left:8px;}
+.week-card[data-phase="1"] .milestone-badge{background:var(--p1-badge);color:var(--p1-badge-text);}
+.week-card[data-phase="2"] .milestone-badge{background:var(--p2-badge);color:var(--p2-badge-text);}
+.week-card[data-phase="3"] .milestone-badge{background:var(--p3-badge);color:var(--p3-badge-text);}
+.week-card[data-phase="4"] .milestone-badge{background:var(--p4-badge);color:var(--p4-badge-text);}
+.week-card[data-phase="5"] .milestone-badge{background:var(--p5-badge);color:var(--p5-badge-text);}
+.week-toggle{font-size:20px;font-weight:300;color:#94A3B8;flex-shrink:0;}
+.week-body{display:none;padding:0 18px 18px;border-top:1px solid #F1F5F9;}
+.week-body.open{display:block;}
+.section-label{font-size:11px;font-weight:700;color:var(--ink-faint);text-transform:uppercase;letter-spacing:0.5px;margin:16px 0 10px;}
+.daily-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px;}
+.day-tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;flex-shrink:0;min-width:38px;text-align:center;}
+.week-card[data-phase="1"] .day-tag{background:var(--p1-badge);color:var(--p1-badge-text);}
+.week-card[data-phase="2"] .day-tag{background:var(--p2-badge);color:var(--p2-badge-text);}
+.week-card[data-phase="3"] .day-tag{background:var(--p3-badge);color:var(--p3-badge-text);}
+.week-card[data-phase="4"] .day-tag{background:var(--p4-badge);color:var(--p4-badge-text);}
+.week-card[data-phase="5"] .day-tag{background:var(--p5-badge);color:var(--p5-badge-text);}
+.day-task{font-size:13px;color:#334155;line-height:1.55;}
+.weekend-box{background:#F8FAFC;border:1px solid var(--rule);border-radius:8px;padding:12px 16px;font-size:13px;color:#334155;line-height:1.65;}
+.resources-wrap{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+.resource-link{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;font-size:12px;font-weight:500;text-decoration:none;transition:opacity 0.15s;}
+.resource-link:hover{opacity:0.8;}
+.resource-link.free{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;}
+.resource-link.paid{background:#FFF7ED;color:#9A3412;border:1px solid #FED7AA;}
+.resource-key{font-size:11px;color:#94A3B8;margin-top:6px;}
+
+/* PHASE NAV */
+.phase-nav{display:flex;justify-content:space-between;align-items:center;margin-top:32px;}
+.phase-nav-btn{padding:10px 18px;border-radius:8px;border:1px solid var(--rule);background:#fff;color:#475569;font-size:13px;font-weight:500;cursor:pointer;transition:border-color 0.15s;}
+.phase-nav-btn:hover:not(:disabled){border-color:#94A3B8;}
+.phase-nav-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.phase-nav-info{font-size:13px;color:#94A3B8;}
+
+/* FOOTER */
+.doc-footer{background:var(--ink-2);color:rgba(255,255,255,0.6);padding:40px 48px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:0;}
+.doc-footer h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;}
+.doc-footer p{font-size:13px;}
+.footer-meta{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-meta-item label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;display:block;color:rgba(255,255,255,0.4);}
+.footer-meta-item span{font-size:14px;font-weight:600;color:rgba(255,255,255,0.8);}
+
+@media(max-width:768px){
+  .cover-inner{padding:60px 20px 48px;}
+  .phase-tabs{padding:12px 16px;top:0;}
+  nav{display:none;}
+  .phase-panel{padding:20px 16px 48px;}
+  .doc-footer{padding:32px 20px;}
+  .phase-tab{font-size:11px;padding:6px 10px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">Healthcare AI Engineer Roadmap</div>
+  <ul class="nav-links">
+    <li><a href="#phase1">P1: Foundations</a></li>
+    <li><a href="#phase2">P2: Agents & MCP</a></li>
+    <li><a href="#phase3">P3: Healthcare AI</a></li>
+    <li><a href="#phase4">P4: MLOps</a></li>
+    <li><a href="#phase5">P5: Architecture</a></li>
+  </ul>
+</nav>
+
+<div class="cover">
+  <div class="cover-inner">
+    <p class="cover-label">Personal Learning Roadmap · Manoj Potharlanka</p>
+    <h1>Healthcare AI Engineer</h1>
+    <p class="cover-sub">A 40-week, project-first roadmap from intermediate Python scripter to healthcare AI practitioner — built around 6.5 hours per week and 4 production-grade portfolio builds.</p>
+    <div class="cover-stats">
+      <div class="cover-stat"><label>Duration</label><span>40 Weeks</span></div>
+      <div class="cover-stat"><label>Weekdays</label><span>30 min/day</span></div>
+      <div class="cover-stat"><label>Weekends</label><span>4 hrs/day</span></div>
+      <div class="cover-stat"><label>Weekly total</label><span>~6.5 hours</span></div>
+      <div class="cover-stat"><label>Build Projects</label><span>4 Total</span></div>
+      <div class="cover-stat"><label>Milestones</label><span>10 Checkpoints</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE TABS -->
+<div class="phase-tabs" id="phaseTabs">
+  <button class="phase-tab active" data-phase="1" onclick="switchPhase(1)">P1: AI Foundations</button>
+  <button class="phase-tab" data-phase="2" onclick="switchPhase(2)">P2: Agents &amp; MCP</button>
+  <button class="phase-tab" data-phase="3" onclick="switchPhase(3)">P3: Healthcare AI</button>
+  <button class="phase-tab" data-phase="4" onclick="switchPhase(4)">P4: MLOps</button>
+  <button class="phase-tab" data-phase="5" onclick="switchPhase(5)">P5: Architecture</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PHASE 1 -->
+<div class="phase-panel active" id="phase1">
+  <div class="phase-header" data-phase="1">
+    <div class="phase-badge">Phase 1 · Weeks 1–8</div>
+    <h2>AI Engineering Foundations</h2>
+    <p>Understand how LLMs work, build your first RAG system — deployed on GCP.</p>
+    <div class="build-target">
+      <div class="build-target-label">🏗️ Phase Build Target</div>
+      <div class="build-target-text">Clinical Document Q&amp;A system on GCP + Vertex AI using RAG</div>
+    </div>
+  </div>
+  <div class="week-list">
+
+    <!-- W1 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">1</div>
+        <div class="week-title-wrap"><span class="week-title">LLM Internals — How Models Actually Think</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Watch Karpathy 'Let's build GPT: from scratch, in code, spelled out' — first 20 mins. This is where he builds a character-level language model and explains next-token prediction concretely, with code.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Continue the same GPT video — next 20 mins. He introduces tokenization and context length here. Pause and ask yourself: why does the model only look backwards, never forwards?</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Read 'The Illustrated Transformer' by Jay Alammar (jalammar.github.io) — all of it.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Read Vicki Boykis 'What Are Embeddings' — Ch 1 &amp; 2 (vickiboykis.com/what_are_embeddings).</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Explore OpenAI tokenizer tool with clinical text. Write 5 observations: how does medical jargon tokenize differently?</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Set up Python environment: VS Code + venv + install openai, anthropic, langchain SDKs. Make your first API call to Claude and GPT-4. Write a script that takes a paragraph of clinical text and returns a summary. Experiment with temperature, max_tokens, and system prompts. Document what changes and why.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://www.youtube.com/watch?v=kCc8FmEb1nY" target="_blank">▶ Let's Build GPT — Karpathy</a>
+          <a class="resource-link free" href="https://jalammar.github.io/illustrated-transformer/" target="_blank">📰 The Illustrated Transformer</a>
+          <a class="resource-link free" href="https://vickiboykis.com/what_are_embeddings/" target="_blank">📖 What Are Embeddings — Vicki Boykis</a>
+          <a class="resource-link free" href="https://platform.openai.com/tokenizer" target="_blank">🔧 OpenAI Tokenizer</a>
+        </div>
+        <div class="resource-key">🟢 Free &nbsp; 🟠 Paid</div>
+      </div>
+    </div>
+
+    <!-- W2 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">2</div>
+        <div class="week-title-wrap"><span class="week-title">Embeddings &amp; Vector Databases</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read Pinecone 'What is a Vector Database?' guide at pinecone.io/learn.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Read Pinecone 'Chunking Strategies for LLM Applications' blog post end to end.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">ChromaDB quickstart docs — get it running locally, insert 10 documents, run a query.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Experiment: embed 20 clinical terms, run similarity search — which ICD codes cluster together?</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Read about pgvector — understand when you'd use it over a dedicated vector DB like Chroma or Pinecone.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build a mini vector search engine: Generate 50 synthetic clinical notes using Claude. Embed them. Store in ChromaDB. Query: 'patients with uncontrolled diabetes' and see what comes back. Experiment with chunk sizes (256 vs 512 vs 1024 tokens). Write a README explaining what you built and what you observed.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://www.pinecone.io/learn/vector-database/" target="_blank">📄 Pinecone Vector DB Guide</a>
+          <a class="resource-link free" href="https://docs.trychroma.com/" target="_blank">📄 ChromaDB Docs</a>
+          <a class="resource-link free" href="https://www.pinecone.io/learn/chunking-strategies/" target="_blank">📰 Chunking Strategies</a>
+          <a class="resource-link free" href="https://github.com/pgvector/pgvector" target="_blank">💻 pgvector GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W3 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">3</div>
+        <div class="week-title-wrap"><span class="week-title">RAG — Retrieval Augmented Generation</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">DeepLearning.AI 'LangChain: Chat with Your Data' — Lessons 1 &amp; 2 (free course, 15 min each).</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Same course — Lessons 3 &amp; 4: retrieval and Q&amp;A chains.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Read 'Deconstructing RAG' on LangChain Blog (blog.langchain.dev).</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Write a 1-page comparison: Naive RAG vs Advanced RAG vs Modular RAG. What are the failure modes of each?</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Read Vertex AI 'Grounding' docs — how Google implements RAG natively. Note what's different from DIY.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Extend your Week 2 mini search into a full RAG pipeline: User asks a clinical question → retrieve relevant chunks → feed to Claude with a structured system prompt → return a grounded answer with cited chunks. Test with 10 healthcare questions. Track every failure and its root cause.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://learn.deeplearning.ai/courses/langchain-chat-with-your-data" target="_blank">🎓 LangChain: Chat with Your Data</a>
+          <a class="resource-link free" href="https://blog.langchain.dev/deconstructing-rag/" target="_blank">📰 Deconstructing RAG</a>
+          <a class="resource-link free" href="https://cloud.google.com/vertex-ai/generative-ai/docs/rag-overview" target="_blank">📄 Vertex AI RAG Engine</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W4 MILESTONE -->
+    <div class="week-card milestone" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">4</div>
+        <div class="week-title-wrap"><span class="week-title">Python Async + API Patterns <span class="milestone-badge">⭐ Milestone</span></span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Real Python 'Async IO in Python: A Complete Walkthrough' — Sections 1 &amp; 2.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Continue — Sections 3 &amp; 4. Write your first async function that calls an LLM API.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Install httpx (async HTTP client). Rewrite one of your API calls using httpx + asyncio.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Implement retry logic with exponential backoff using the 'tenacity' library.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE REVIEW: Document what you can build now vs Week 1. Write a personal gap analysis.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Refactor your RAG pipeline to be fully async: multiple documents retrieved concurrently, API calls with retry logic, proper exception handling and structured logging. Benchmark: how much faster is async vs sync on 50 parallel queries? This is your first production-quality Python script.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://realpython.com/async-io-python/" target="_blank">📰 Async IO in Python — Real Python</a>
+          <a class="resource-link free" href="https://www.python-httpx.org/" target="_blank">📄 httpx Docs</a>
+          <a class="resource-link free" href="https://github.com/jd/tenacity" target="_blank">💻 Tenacity (retry) GitHub</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W5 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">5</div>
+        <div class="week-title-wrap"><span class="week-title">Structured Outputs &amp; Pydantic</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Pydantic docs — 'Pydantic in 5 Minutes'. Understand models, validators, field types.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Install 'instructor' library (jxnl/instructor on GitHub). Read the quickstart — it's built for this.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build a structured extractor: input = clinical note, output = Pydantic model {diagnosis, medications[], vitals}.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Anthropic tool_use docs — understand how structured outputs work via tool calling vs JSON mode.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Handle edge cases: what happens when the LLM returns invalid data? Add validators and fallback logic.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build a Clinical Entity Extractor: Input any discharge summary → extract a validated Pydantic object: {patient_age, primary_diagnosis with ICD10, comorbidities[], medications[], follow_up_required: bool, risk_level: low/medium/high}. Test on 20 synthetic notes. Track which fields fail most often.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://docs.pydantic.dev/latest/" target="_blank">📄 Pydantic Docs</a>
+          <a class="resource-link free" href="https://github.com/jxnl/instructor" target="_blank">💻 Instructor Library</a>
+          <a class="resource-link free" href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use" target="_blank">📄 Anthropic Tool Use Docs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W6 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">6</div>
+        <div class="week-title-wrap"><span class="week-title">GCP + Vertex AI Setup</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Set up GCP free tier. Enable Vertex AI, Cloud Storage, BigQuery, Cloud Run APIs.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Google Cloud Skills Boost: 'Introduction to Generative AI' (free, ~45 min).</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Vertex AI quickstart: make your first call to Gemini via the Vertex Python SDK.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Cloud Storage: upload your synthetic clinical notes dataset. Read them back via Python SDK.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Vertex AI Embeddings API: re-embed your clinical notes using text-embedding-004. Compare quality vs OpenAI.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Port your RAG pipeline to Vertex AI: use Vertex Embeddings, Cloud Storage for document storage, Gemini for LLM calls. Deploy the FastAPI endpoint to Cloud Run (basic — just make it callable via HTTP). Document what broke and how you fixed it.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://cloud.google.com/vertex-ai/generative-ai/docs/start/quickstarts/quickstart-multimodal" target="_blank">📄 Vertex AI Quickstart</a>
+          <a class="resource-link free" href="https://www.cloudskillsboost.google/paths/118" target="_blank">🎓 GCP Gen AI Learning Path</a>
+          <a class="resource-link free" href="https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-python-service" target="_blank">📄 Cloud Run Python</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W7 -->
+    <div class="week-card" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">7</div>
+        <div class="week-title-wrap"><span class="week-title">BUILD — Clinical Q&amp;A System (Part 1)</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Design architecture: draw the data flow. Define inputs, outputs, and error states before coding.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build ingestion pipeline: PDF clinical notes → chunk → embed → store in Cloud Storage.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build retrieval layer: user query → embed → similarity search → top-k chunks returned.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Build generation layer: chunks + system prompt → Vertex AI Gemini → structured answer with citations.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Wire it all together. Test end-to-end with 5 queries. Fix the obvious breaks.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build the API layer: FastAPI endpoint that accepts a clinical question, runs the full RAG pipeline, returns JSON: {answer, source_chunks[], confidence_indicator}. Test with 20 queries covering your core disease conditions: diabetes, CHF, hypertension, asthma.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://fastapi.tiangolo.com/" target="_blank">📄 FastAPI Docs</a>
+          <a class="resource-link free" href="https://python.langchain.com/docs/tutorials/rag/" target="_blank">📄 LangChain RAG Tutorial</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W8 MILESTONE -->
+    <div class="week-card milestone" data-phase="1">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">8</div>
+        <div class="week-title-wrap"><span class="week-title">BUILD — Clinical Q&amp;A System (Part 2) <span class="milestone-badge">⭐ Milestone</span></span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Add streaming responses to your FastAPI endpoint (Vertex AI supports streaming).</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Deploy to Cloud Run with proper environment variables. Never hardcode API keys.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Add structured logging: every query, response, latency, and token count logged to Cloud Logging.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Write a README with an architecture diagram (use Mermaid syntax). Explain every design decision.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Push to GitHub. Record a 5-min Loom video demo. Portfolio Project #1 is complete.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Add healthcare-specific guardrails: a system prompt that forces the model to cite its sources, adds a 'not medical advice' disclaimer, and flags when it cannot find relevant information in the knowledge base. Test edge cases: ambiguous questions, out-of-scope queries, contradictory source documents.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://cloud.google.com/run/docs/quickstarts/build-and-deploy/deploy-python-service" target="_blank">📄 Cloud Run Deployment</a>
+          <a class="resource-link free" href="https://mermaid.js.org/syntax/flowchart.html" target="_blank">📄 Mermaid Diagrams</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /week-list -->
+  <div class="phase-nav">
+    <button class="phase-nav-btn" disabled>← Previous Phase</button>
+    <span class="phase-nav-info">Phase 1 of 5</span>
+    <button class="phase-nav-btn" onclick="switchPhase(2)">Next Phase →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PHASE 2 -->
+<div class="phase-panel" id="phase2">
+  <div class="phase-header" data-phase="2">
+    <div class="phase-badge">Phase 2 · Weeks 9–16</div>
+    <h2>Agentic AI + MCP + Orchestration</h2>
+    <p>Build agents that act, not just answer — including MCP servers for FHIR &amp; BigQuery.</p>
+    <div class="build-target">
+      <div class="build-target-label">🏗️ Phase Build Target</div>
+      <div class="build-target-text">Care Gap Closure Agent using Google ADK with MCP servers wrapping FHIR APIs and BigQuery</div>
+    </div>
+  </div>
+  <div class="week-list">
+
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">9</div>
+        <div class="week-title-wrap"><span class="week-title">Agent Patterns — ReAct, Plan-Execute, Reflexion</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read Lilian Weng 'LLM-Powered Autonomous Agents' (lilianweng.github.io) — full article.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">DeepLearning.AI 'AI Agents in LangGraph' — Lessons 1 &amp; 2 (free course).</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Same course — Lessons 3 &amp; 4: tool calling and agent loops.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Compare ReAct vs Plan-Execute vs Reflexion in a 1-page doc. When would you use each in healthcare?</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Build a basic ReAct agent from scratch using Anthropic API. Give it 2 tools: patient lookup + care gap checker.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build a basic healthcare ReAct agent: tools = (1) get_patient_conditions(patient_id), (2) check_clinical_guidelines(condition), (3) write_care_note(patient_id, note). Run it through 5 patient scenarios. Observe where it reasons well and where it loops or hallucinates. Write an honest failure analysis.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://learn.deeplearning.ai/courses/ai-agents-in-langgraph" target="_blank">🎓 AI Agents in LangGraph</a>
+          <a class="resource-link free" href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank">📰 LLM Powered Agents — Lilian Weng</a>
+          <a class="resource-link free" href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use" target="_blank">📄 Anthropic Tool Use</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">10</div>
+        <div class="week-title-wrap"><span class="week-title">Google ADK — Deep Dive</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">ADK docs: 'Get Started' + 'Core Concepts'. Read Agent, Tool, Runner sections carefully.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">ADK quickstart: build your first ADK agent locally. Use the CLI to run and inspect it.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">ADK docs: 'Multi-Agent Systems' — understand coordinator vs specialist agent patterns.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">ADK docs: 'Memory and State' — how sessions work, state persistence across turns.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">ADK docs: 'Evaluation' — how to test agent behavior systematically. Set up a basic eval.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Port your Week 9 healthcare ReAct agent into Google ADK. Use the proper ADK Agent class and register tools correctly. Add a second specialist agent (e.g., a 'clinical guidelines lookup' agent). Have the coordinator delegate to it. Run the same 5 patient scenarios and compare quality vs your raw ReAct implementation.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://google.github.io/adk-docs/" target="_blank">📄 Google ADK Docs</a>
+          <a class="resource-link free" href="https://github.com/google/adk-python" target="_blank">💻 ADK Python GitHub</a>
+          <a class="resource-link free" href="https://www.youtube.com/@googlecloudtech" target="_blank">▶ Google Cloud YouTube</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">11</div>
+        <div class="week-title-wrap"><span class="week-title">LangGraph — Stateful Agent Workflows</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">LangChain Academy 'Introduction to LangGraph' — Module 1 (free official course).</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Module 2: edges, conditional routing.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Module 3: persistence and state management.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">LangGraph docs: 'Human in the Loop' — understand interrupt nodes for human approval workflows.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Write your own 1-page decision framework: when to use ADK vs LangGraph vs raw API?</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build a care management workflow in LangGraph: stateful graph that (1) ingests patient summary, (2) identifies care gaps, (3) generates personalized outreach message, (4) pauses for human approval via interrupt node, (5) marks as actioned. This pattern maps directly to your PHM work at Innovaccer.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://academy.langchain.com/courses/intro-to-langgraph" target="_blank">🎓 LangChain Academy — LangGraph</a>
+          <a class="resource-link free" href="https://langchain-ai.github.io/langgraph/" target="_blank">📄 LangGraph Docs</a>
+          <a class="resource-link free" href="https://github.com/langchain-ai/langgraph/tree/main/examples" target="_blank">💻 LangGraph Examples</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-card milestone" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">12</div>
+        <div class="week-title-wrap"><span class="week-title">Tool Design for Agents <span class="milestone-badge">⭐ Milestone</span></span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read Anthropic 'Best Practices for Tool Definitions'. Tool descriptions ARE the code.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Study tool schema patterns: name, description, input_schema. Bad descriptions = bad agent decisions.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Wrap a mock FHIR API as ADK tools: getPatientById, getConditions, getMedications.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Wrap a BigQuery query as an ADK tool: runPopulationQuery(sql) → returns a dataframe summary.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Review Weeks 9–12. Can you build and evaluate a multi-agent system? Document your patterns.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Tool quality workshop: Take 3 tools you've built and rewrite each description 3 different ways. Run the agent and observe how description wording changes agent decisions. Write a personal guide on what makes a great tool description. This skill makes you 10x better as an AI architect.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://docs.anthropic.com/en/docs/build-with-claude/tool-use#best-practices-for-tool-definitions" target="_blank">📄 Tool Best Practices — Anthropic</a>
+          <a class="resource-link free" href="https://python.langchain.com/docs/concepts/tools/" target="_blank">📄 LangChain Tool Concepts</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W13 — MCP DEEP DIVE -->
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">13</div>
+        <div class="week-title-wrap"><span class="week-title">MCP — Model Context Protocol Deep Dive</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read the full MCP introduction at modelcontextprotocol.io. Understand primitives: Tools, Resources, Prompts.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">MCP Python SDK quickstart — build a minimal MCP server exposing 1 tool (hello world level).</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">MCP architecture page: understand how a client connects to a server. Study stdio vs HTTP/SSE transport.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Explore existing MCP servers: filesystem, GitHub, Slack at github.com/modelcontextprotocol/servers.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Write a clear 1-page comparison: MCP vs function calling vs ADK tools. When does each shine?</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build your first real MCP server: a 'Clinical Guidelines Server' exposing 3 tools: (1) getGuidelinesByCondition(condition_name), (2) getCareGapCriteria(icd_code), (3) getDrugInteractions(medication_list[]) using a local JSON file as the database. Connect it to Claude Desktop to verify it works end to end.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://modelcontextprotocol.io/introduction" target="_blank">📄 MCP Official Docs</a>
+          <a class="resource-link free" href="https://github.com/modelcontextprotocol/python-sdk" target="_blank">💻 MCP Python SDK</a>
+          <a class="resource-link free" href="https://github.com/modelcontextprotocol/servers" target="_blank">💻 MCP Servers Repo</a>
+          <a class="resource-link free" href="https://modelcontextprotocol.io/docs/concepts/architecture" target="_blank">📄 MCP Architecture</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W14 — FHIR MCP -->
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">14</div>
+        <div class="week-title-wrap"><span class="week-title">MCP — Build Your FHIR MCP Server</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Use the public HAPI FHIR test server (hapi.fhir.org/baseR4). Query a Patient and Condition resource via curl.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Python fhirclient: install it, write queries for Patient, Condition, and Observation resources.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build MCP server skeleton with 2 tools: getPatientById and getConditionsByPatient.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Add 2 more tools: getObservations (vitals/labs) and getMedicationRequests. Handle FHIR pagination.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Add a Resource: 'patient_context' — returns a formatted patient clinical summary as MCP resource content.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Connect your FHIR MCP server to an ADK agent. Build a scenario: 'Find patients with HbA1c > 9 and no recent endocrinology visit.' The agent queries FHIR via your MCP tools, identifies the gap, and drafts a care outreach message. This is real healthcare AI.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://hapi.fhir.org/" target="_blank">🔧 HAPI FHIR Public Server</a>
+          <a class="resource-link free" href="https://github.com/smart-on-fhir/client-py" target="_blank">💻 SMART FHIR Python Client</a>
+          <a class="resource-link free" href="https://hl7.org/fhir/R4/" target="_blank">📄 HL7 FHIR R4 Docs</a>
+          <a class="resource-link free" href="https://cloud.google.com/healthcare-api/docs/how-tos/fhir" target="_blank">📄 Google Healthcare API FHIR</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W15 — BQ MCP -->
+    <div class="week-card" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">15</div>
+        <div class="week-title-wrap"><span class="week-title">MCP — BigQuery MCP Server + ADK Integration</span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Design and load a synthetic BigQuery schema: claims, patients, diagnoses tables (1000 synthetic patients).</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">BigQuery MCP server tool 1: runPatientQuery(filters) returns a population summary.</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Tool 2: getCareGapSummary(condition, metric) — 'diabetic patients missing HbA1c in last 90 days'.</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Tool 3: getContractPerformance(payer_id, measure_id) — maps directly to your VBC work at Innovaccer.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Connect both MCP servers (FHIR + BigQuery) to your ADK agent simultaneously.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Build the integrated multi-MCP agent: ADK coordinator with access to BOTH MCP servers. Run a complex scenario: 'Give me a population health summary for diabetic patients — aggregate stats from BigQuery, individual FHIR records for the top 5 highest-risk cases.' This is your Phase 2 warm-up sprint.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://cloud.google.com/bigquery/docs/reference/libraries" target="_blank">📄 BigQuery Python Client</a>
+          <a class="resource-link free" href="https://google.github.io/adk-docs/tools/mcp-tools/" target="_blank">📄 ADK MCP Integration Docs</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- W16 MILESTONE -->
+    <div class="week-card milestone" data-phase="2">
+      <button class="week-header" onclick="toggleWeek(this)">
+        <div class="week-num">16</div>
+        <div class="week-title-wrap"><span class="week-title">BUILD — Care Gap Closure Agent <span class="milestone-badge">⭐ Milestone</span></span></div>
+        <span class="week-toggle">+</span>
+      </button>
+      <div class="week-body">
+        <div class="section-label">📅 Weekday Plan — 30 min each</div>
+        <div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Design the full agent: exact workflow, tools, MCP connections, human-in-loop points, output schema.</span></div>
+        <div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Implement: patient identification layer via BigQuery MCP (who has gaps and why?).</span></div>
+        <div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Implement: patient context enrichment via FHIR MCP (full clinical picture per patient).</span></div>
+        <div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Implement: personalized outreach message generation + clinical guidelines check.</span></div>
+        <div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Deploy on Cloud Run. Architecture doc + GitHub push + Loom demo. Portfolio Project #2 done.</span></div>
+        <div class="section-label">🏗️ Weekend Build — 4 hours</div>
+        <div class="weekend-box">Polish: add multi-condition support (diabetes + CHF + hypertension), add a priority scoring tool, and a full audit log of every agent action with rationale. This directly mirrors the PHM engine you're building with Tawuniya × Meena at Innovaccer.</div>
+        <div class="section-label">📚 Resources</div>
+        <div class="resources-wrap">
+          <a class="resource-link free" href="https://google.github.io/adk-docs/multi-agents/" target="_blank">📄 ADK Multi-Agent Docs</a>
+          <a class="resource-link free" href="https://google.github.io/adk-docs/deploy/cloud-run/" target="_blank">📄 Cloud Run with ADK</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="phase-nav">
+    <button class="phase-nav-btn" onclick="switchPhase(1)">← Previous Phase</button>
+    <span class="phase-nav-info">Phase 2 of 5</span>
+    <button class="phase-nav-btn" onclick="switchPhase(3)">Next Phase →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PHASE 3 -->
+<div class="phase-panel" id="phase3">
+  <div class="phase-header" data-phase="3">
+    <div class="phase-badge">Phase 3 · Weeks 17–26</div>
+    <h2>Healthcare-Specific AI</h2>
+    <p>Clinical NLP, HCC risk scoring, claims data intelligence, and utilization management.</p>
+    <div class="build-target">
+      <div class="build-target-label">🏗️ Phase Build Target</div>
+      <div class="build-target-text">HCC Risk Scoring Pipeline on BigQuery + Vertex AI processing claims + clinical notes</div>
+    </div>
+  </div>
+  <div class="week-list">
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">17</div><div class="week-title-wrap"><span class="week-title">Clinical NLP — medspaCy &amp; scispaCy</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Install medspaCy. Run the quickstart. Process a clinical note. See what entities are detected out of the box.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">scispaCy docs + install. Understand the difference: scispaCy for biomedical text, medspaCy for clinical context/sections.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">medspaCy negation detection: 'No evidence of pneumonia' ≠ pneumonia. Critical for diagnosis accuracy.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">medspaCy section detection: extract only the 'Assessment &amp; Plan' section, not the History.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Compare: medspaCy rule-based NER vs your Week 5 LLM-based extraction. When is each approach better?</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a Clinical NLP pipeline: Batch 50 synthetic discharge summaries → extract {diagnoses[], medications[], procedures[], negated_conditions[], section_context} using medspaCy. Then pass extracted entities to Claude to generate a structured clinical summary. Compare accuracy vs pure LLM extraction from Week 5.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://github.com/medspacy/medspacy" target="_blank">💻 medspaCy GitHub</a><a class="resource-link free" href="https://allenai.github.io/scispacy/" target="_blank">📄 scispaCy Docs</a><a class="resource-link free" href="https://course.spacy.io/en" target="_blank">🎓 spaCy Course (free)</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">18</div><div class="week-title-wrap"><span class="week-title">NER for Diagnoses, Medications &amp; Code Normalization</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">AWS Comprehend Medical docs — what does it extract out of the box? (PHI, ICD-10, RxNorm, SNOMED CT).</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Call Comprehend Medical API on 10 clinical notes. Compare entity extraction vs your medspaCy pipeline.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Hugging Face: explore biomedical NER models. Run Bio_ClinicalBERT locally on a clinical note.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Map extracted diagnoses to ICD-10 codes using a lookup table + Claude for disambiguation.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Map medications to RxNorm codes. Understand why code normalization matters for claims matching.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a hybrid NER pipeline: (1) medspaCy for fast rule-based extraction, (2) Comprehend Medical for ICD-10/RxNorm mapping, (3) Claude for disambiguation when confidence is low. Run on 100 synthetic notes. Build a small gold-standard test set and calculate entity-level precision/recall.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://docs.aws.amazon.com/comprehend-medical/latest/dev/comprehendmedical-welcome.html" target="_blank">📄 AWS Comprehend Medical</a><a class="resource-link free" href="https://huggingface.co/emilyalsentzer/Bio_ClinicalBERT" target="_blank">💻 Bio_ClinicalBERT</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">19</div><div class="week-title-wrap"><span class="week-title">FHIR + AI — Clinical Data as Agent Context</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Deep dive FHIR R4: Patient, Condition, Observation, MedicationRequest, CarePlan resource specs.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build a 'FHIR to LLM context' formatter: given a patient's full FHIR bundle, produce a clean clinical narrative.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Embed FHIR-derived patient summaries. This becomes your patient vector for population-level similarity search.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Google Healthcare API: FHIR store setup and the de-identification API (critical for HIPAA compliance).</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Build a CarePlan generator: FHIR patient data in → Claude → structured FHIR CarePlan resource out.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Extend your FHIR MCP server: add a 'patient_llm_context' resource that auto-formats any patient's complete FHIR record into a clean LLM-ready clinical summary. The agent calls one resource and gets a full patient picture. Test with complex multi-condition patients (diabetes + CKD + hypertension).</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://hl7.org/fhir/R4/patient.html" target="_blank">📄 FHIR R4 Patient Resource</a><a class="resource-link free" href="https://cloud.google.com/healthcare-api/docs/concepts/fhir" target="_blank">📄 Google Healthcare API</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">20</div><div class="week-title-wrap"><span class="week-title">Claims Data AI + HCC Fundamentals <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">CMS documentation: understand HCC (Hierarchical Condition Categories) — what they are and why they drive revenue.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Read CMS-HCC V28 model technical docs. Understand RAF scores, demographic factors, and risk adjustment mechanics.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build a synthetic claims dataset in BigQuery: 1000 patients, 3 years, realistic ICD-10 + procedure code distributions.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Exploratory BigQuery SQL analysis: HCC category distribution, comorbidity patterns, cost per patient cohort.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Review your tech stack decisions across Phases 1–3. Document the 'why' for each choice.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a claims data profiling tool: given a patient's claims history in BigQuery, extract: (1) all HCC-eligible diagnoses, (2) gaps in expected conditions (diabetic with no retinopathy screening code), (3) cost trend analysis, (4) utilization patterns. Return as a structured profile JSON.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.cms.gov/medicare/health-plans/medicareadvtgspecratestats/risk-adjustors" target="_blank">📄 CMS HCC Model Docs</a><a class="resource-link free" href="https://cloud.google.com/bigquery/docs/bqml-introduction" target="_blank">📄 BigQuery ML Intro</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">21</div><div class="week-title-wrap"><span class="week-title">HCC Risk Scoring — Model Design</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Study CMS-HCC V28: which ICD-10 codes map to which HCC categories? Download the crosswalk file.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build an HCC mapper in Python: given a list of ICD-10 codes → return HCC categories + RAF score contribution.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">BigQuery ML: train a logistic regression on your synthetic claims to predict high-cost patients next year.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">LLM explainability: use Claude to generate a plain-language explanation of WHY a patient is high risk.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Read 2 arXiv papers on healthcare cost prediction ML. Write a 1-page summary of approaches.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build the HCC scoring prototype: (1) ingest patient claims from BigQuery, (2) ICD-10 → HCC mapping, (3) RAF score calculation, (4) BigQuery ML risk model prediction, (5) Claude-generated explainer paragraph per high-risk patient. Output: ranked patient list with risk score + natural language clinical rationale.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/bigquery/docs/logistic-regression-prediction" target="_blank">📄 BigQuery ML Logistic Regression</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">22</div><div class="week-title-wrap"><span class="week-title">Clinical Coding Automation — ICD-10 AI Suggestion</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Understand the clinical coding workflow: physician documents → coder assigns codes → biller submits claims.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build an ICD-10 suggester: clinical note → Claude with specialized coding prompt → top 5 codes with rationale.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Add HCC awareness: flag which suggested codes are HCC-eligible and show their RAF score impact.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Build a coding gap detector: patient has diabetes in FHIR but no HCC code in claims → flag and quantify revenue impact.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Test accuracy: compare AI suggestions vs ground truth. Calculate precision/recall per code category.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a Coding Assistant MCP tool: getICD10Suggestions(clinical_text, existing_conditions) → returns ranked ICD codes with HCC flag, confidence score, and clinical rationale. Add to your FHIR MCP server. Think seriously about how this feature would work inside Innovaccer's platform — that's real product thinking.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.icd10data.com/" target="_blank">🔧 ICD-10-CM Code Browser</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">23</div><div class="week-title-wrap"><span class="week-title">AI for Utilization Management &amp; Prior Auth</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read CMS Prior Authorization Final Rule (Jan 2024). What must payers support? What timelines?</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Map the prior auth workflow: request → clinical criteria check → decision → appeal. Mark every AI touchpoint.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build a PA criteria checker: procedure code + patient clinical summary → check coverage criteria → approve/deny/pend with rationale.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Add 'alternative suggestion': if denied, what modification to the request would likely be approved?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Read the ONC HTI-1 final rule summary. What does it mean for EHR interoperability and AI transparency requirements?</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a Prior Auth AI assistant: (1) intake form parsing, (2) patient FHIR history retrieval, (3) clinical criteria matching against a payer ruleset JSON, (4) structured decision with rationale, (5) appeal letter draft if denied. Directly tied to your Revenue Cycle experience and the regulatory tailwind.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-and-prior-authorization-final-rule-cms-0057-f" target="_blank">📄 CMS Prior Auth Rule</a><a class="resource-link free" href="https://www.healthit.gov/topic/laws-regulation-and-policy/health-data-technology-and-interoperability-rule" target="_blank">📄 ONC HTI-1 Summary</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">24</div><div class="week-title-wrap"><span class="week-title">BUILD — HCC Pipeline Part 1 <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Architect the full pipeline: claims ingestion → NLP on clinical notes → HCC mapping → risk scoring → LLM explainer.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build claims ingestion + HCC mapping layer in BigQuery.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Build clinical NLP layer: medspaCy + Comprehend Medical → structured entities per note.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Integrate: enrich HCC scores with NLP-identified conditions not yet captured in claims codes.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Is the pipeline running end to end? Document the top 3 issues and your fix plan.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Full integration run: push 100 synthetic patients through the entire pipeline. Measure: (1) HCC capture rate improvement with NLP enrichment vs claims only, (2) end-to-end latency, (3) error rate per stage. Fix the top 3 pipeline issues.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/vertex-ai/docs/pipelines/introduction" target="_blank">📄 Vertex AI Pipelines</a></div></div></div>
+
+    <div class="week-card" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">25</div><div class="week-title-wrap"><span class="week-title">BUILD — HCC Pipeline Part 2</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Add Vertex AI: Gemini generates risk explainer summaries at scale using async batch processing.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build output layer: BigQuery table with risk_score, hcc_categories[], risk_factors[], llm_summary per patient.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Add a FastAPI + Cloud Run endpoint to query individual patient risk profiles.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Add batch processing: async Python to run the pipeline on 1000 patients efficiently.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Performance tuning: where are the bottlenecks? Fix the slowest stage.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a business output: export risk results to a CSV/Sheets-friendly format with a summary report. Add a 'HCC uplift opportunities' section: patients where NLP found conditions not captured in claims codes. Quantify the RAF score and revenue impact. This framing is directly valuable to your payer clients.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/vertex-ai/docs/predictions/batch-predictions" target="_blank">📄 Vertex AI Batch Prediction</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="3"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">26</div><div class="week-title-wrap"><span class="week-title">BUILD — HCC Pipeline Polish <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">HIPAA logging audit: no PHI in plain text logs. Patient_id references only. Use GCP DLP if needed.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Error handling: graceful failures when FHIR record missing, BigQuery returns empty, Vertex API times out.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Write comprehensive README + Mermaid architecture diagram.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Write a 1-page business case: what ROI does this pipeline deliver for a Medicare Advantage payer?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Push to GitHub. Record Loom demo. Portfolio Project #3 — your strongest one. Celebrate it.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Write a blog post on Medium or Substack: 'How I Built an AI-Powered HCC Risk Scoring Pipeline Using FHIR, BigQuery, and LLMs.' Share the architecture, the lessons, the failure modes. Healthcare AI is a small community. Thoughtful technical content builds reputation fast.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/sensitive-data-protection/docs/deidentify-sensitive-data" target="_blank">📄 GCP DLP API</a></div></div></div>
+
+  </div>
+  <div class="phase-nav">
+    <button class="phase-nav-btn" onclick="switchPhase(2)">← Previous Phase</button>
+    <span class="phase-nav-info">Phase 3 of 5</span>
+    <button class="phase-nav-btn" onclick="switchPhase(4)">Next Phase →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PHASE 4 -->
+<div class="phase-panel" id="phase4">
+  <div class="phase-header" data-phase="4">
+    <div class="phase-badge">Phase 4 · Weeks 27–32</div>
+    <h2>MLOps + AI in Production</h2>
+    <p>Evaluate, monitor, and maintain AI systems — the difference between demos and products.</p>
+    <div class="build-target">
+      <div class="build-target-label">🏗️ Phase Build Target</div>
+      <div class="build-target-text">Full eval harness + CI/CD deployment pipeline with GCP monitoring dashboard</div>
+    </div>
+  </div>
+  <div class="week-list">
+
+    <div class="week-card" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">27</div><div class="week-title-wrap"><span class="week-title">Evaluation — RAGAS &amp; LLM-as-Judge</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">RAGAS docs: understand the 4 core metrics — faithfulness, answer relevancy, context precision, context recall.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Install RAGAS. Run it against your Phase 1 Clinical Q&amp;A system. Get your baseline scores.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Understand 'LLM-as-judge': how to use Claude to evaluate Claude's own outputs. Read Anthropic's guidance.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Build a custom healthcare eval metric: clinical accuracy, citation correctness, hallucination rate.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">DeepLearning.AI 'Evaluating &amp; Debugging Generative AI' — watch first 2 lessons.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build an eval harness for your Phase 1 RAG system: 50 Q&amp;A pairs with ground truth answers. Run RAGAS metrics + your custom clinical accuracy metric. Output a scorecard. Then make ONE change (e.g., different chunk size) and re-run. Practice the iteration loop: eval → change → eval.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://docs.ragas.io/en/stable/" target="_blank">📄 RAGAS Docs</a><a class="resource-link free" href="https://github.com/explodinggradients/ragas" target="_blank">💻 RAGAS GitHub</a><a class="resource-link free" href="https://learn.deeplearning.ai/courses/evaluating-debugging-generative-ai" target="_blank">🎓 Eval &amp; Debug Gen AI</a></div></div></div>
+
+    <div class="week-card" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">28</div><div class="week-title-wrap"><span class="week-title">Observability — Tracing, Logging, Cost Monitoring</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">LangSmith quickstart: set up an account, add tracing to your LangGraph care gap agent.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">LangSmith: explore traces, runs, feedback. Tag each run with patient_condition metadata.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">GCP Cloud Trace + Cloud Logging: add structured logging to all your Cloud Run deployments.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Token cost tracking: log input + output tokens per request. Build a cost-per-patient report.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">GCP Cloud Monitoring: set up a simple dashboard with latency, error rate, and token cost metrics.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Instrument all 3 portfolio builds with observability: LangSmith tracing on agents, structured Cloud Logging on APIs, token cost tracking per pipeline stage. Build a GCP Cloud Monitoring dashboard with 4 metrics: p95 request latency, error rate, daily token cost, and RAG retrieval quality score.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://docs.smith.langchain.com/" target="_blank">📄 LangSmith Docs</a><a class="resource-link free" href="https://cloud.google.com/monitoring/docs" target="_blank">📄 GCP Cloud Monitoring</a></div></div></div>
+
+    <div class="week-card" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">29</div><div class="week-title-wrap"><span class="week-title">CI/CD for AI — GitHub Actions + Cloud Build</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">GitHub Actions basics: write a workflow that runs your Python tests on every push to main.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Add eval step to CI: run RAGAS on a small test set. Fail the build if faithfulness score &lt; 0.7.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">GCP Cloud Build: automated Docker build + Cloud Run deploy triggered on push to main.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Model versioning: when you change your prompt or retrieval strategy, log the version hash.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Rollback strategy: how do you quickly revert to a previous working version of your AI system?</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a complete CI/CD pipeline for your Phase 1 RAG system: push to GitHub → tests run → RAGAS eval runs → if passing → Docker build → deploy to Cloud Run → smoke test in prod. Document every step. This is what production AI engineering looks like.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://docs.github.com/en/actions" target="_blank">📄 GitHub Actions Docs</a><a class="resource-link free" href="https://cloud.google.com/build/docs" target="_blank">📄 GCP Cloud Build</a><a class="resource-link free" href="https://www.cloudskillsboost.google/paths/117" target="_blank">🎓 MLOps on GCP Path</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">30</div><div class="week-title-wrap"><span class="week-title">Guardrails + HIPAA-Compliant AI <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read: 'Guardrails for LLMs' — input validation, output validation, PII detection, toxicity filters.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Install Guardrails AI. Add output validators to your clinical Q&amp;A system.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">HIPAA in AI: what counts as PHI in LLM contexts? When does sending data to an external API create a BAA requirement?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Build a PHI scrubber using Microsoft Presidio before any data leaves your GCP environment.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Can you now describe your full MLOps stack? Eval + observability + CI/CD + guardrails. Document it.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Add guardrails to all 3 portfolio projects: (1) PHI scrubbing before any external API call, (2) output validation for hallucinated ICD codes, (3) audit logging of all AI decisions with rationale. Add a 'HIPAA Compliance Notes' section to each project README. Future employers will read these.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://github.com/microsoft/presidio" target="_blank">💻 Presidio — PHI Anonymizer</a><a class="resource-link free" href="https://docs.guardrailsai.com/" target="_blank">📄 Guardrails AI</a><a class="resource-link free" href="https://cloud.google.com/security/compliance/hipaa" target="_blank">📄 GCP HIPAA Guide</a></div></div></div>
+
+    <div class="week-card" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">31</div><div class="week-title-wrap"><span class="week-title">BUILD — Eval Harness + Monitoring Dashboard</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Design a unified eval harness covering all 3 portfolio projects with consistent metrics and reporting.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Build eval dataset factory: Python script that generates Q&amp;A eval pairs from synthetic clinical data using Claude.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Integrate RAGAS + custom healthcare metrics into a single test suite runnable with pytest.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Set up automated weekly eval runs in GitHub Actions. Store results in BigQuery for trend analysis.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Build a GCP Monitoring dashboard showing quality metrics over time — track improvement as you make changes.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build eval + CI/CD for your HCC Risk Scoring pipeline: pipeline correctness tests, LLM quality eval (are explainers medically accurate?), and cost tracking per 1000 patients processed.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://docs.pytest.org/en/stable/" target="_blank">📄 pytest Docs</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="4"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">32</div><div class="week-title-wrap"><span class="week-title">BUILD — Complete &amp; Polish <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Complete GCP Monitoring dashboard. Add alerting: notify (email/Slack) if quality drops below threshold.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Write runbooks: 'what to do if RAGAS faithfulness drops below 0.6'. This is operational maturity.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Architecture Decision Records (ADRs): document the key design choices and trade-offs for each project.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">GitHub portfolio audit: clean READMEs, consistent folder structure, relevant tags and topics.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Record a 10-min portfolio walkthrough Loom covering all 3 projects. Portfolio is now production-grade.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Write a LinkedIn post: 'What I learned building 3 healthcare AI systems in production — the things no course teaches you.' Share the hard lessons, not the code. Healthcare AI is a small community. Thoughtful practitioner content builds reputation faster than any credential.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://adr.github.io/" target="_blank">📄 Architecture Decision Records</a></div></div></div>
+
+  </div>
+  <div class="phase-nav">
+    <button class="phase-nav-btn" onclick="switchPhase(3)">← Previous Phase</button>
+    <span class="phase-nav-info">Phase 4 of 5</span>
+    <button class="phase-nav-btn" onclick="switchPhase(5)">Next Phase →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ PHASE 5 -->
+<div class="phase-panel" id="phase5">
+  <div class="phase-header" data-phase="5">
+    <div class="phase-badge">Phase 5 · Weeks 33–40</div>
+    <h2>AI Solutions Architecture</h2>
+    <p>Design AI-first healthcare products and turn your domain expertise into strategic leverage.</p>
+    <div class="build-target">
+      <div class="build-target-label">🏗️ Phase Build Target</div>
+      <div class="build-target-text">Full System Design Document for an AI-Powered Population Health Engine</div>
+    </div>
+  </div>
+  <div class="week-list">
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">33</div><div class="week-title-wrap"><span class="week-title">AI-First Healthcare Product Design</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Read a16z 'AI in Healthcare' articles (a16z.com/tag/health). Identify the common design principles.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Case study: how do Epic, Innovaccer, and Health Catalyst approach AI product integration? Research 3 products.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Map your PHM engine workflows. For each step: should AI augment, automate, or stay human? Be specific.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">'Jobs to be Done' applied to AI healthcare products: what is the care manager 'hiring' AI to do?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Draft YOUR 5 design principles for AI in healthcare. These become your intellectual property.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Design exercise: take one existing Innovaccer workflow you know well. Redesign it from scratch with AI at the center — not 'add AI to the workflow' but 'what would this workflow look like if AI capabilities were assumed from day one?' Document before/after and the implications for UX, data, and business model.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://a16z.com/tag/health/" target="_blank">📰 a16z Health Tech Articles</a><a class="resource-link free" href="https://rockhealth.com/insights/" target="_blank">📰 Rock Health Reports</a><a class="resource-link free" href="https://ai.nejm.org/" target="_blank">📰 NEJM AI Journal</a></div></div></div>
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">34</div><div class="week-title-wrap"><span class="week-title">ROI Framing — Model Metrics to Business Outcomes</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Build a translation table: precision/recall → what it means in dollars for a payer's risk adjustment program.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">HCC capture rate: if your AI improves average RAF by 0.05 on 50,000 Medicare Advantage members — calculate the revenue.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">HEDIS impact: if your care gap agent improves a measure by 2 percentage points — what's the Star rating effect?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Prior auth automation: what's the fully-loaded cost of a manual PA? What's the ROI of automating 60%?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Draft a reusable 1-page ROI model template for any healthcare AI implementation conversation.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Build a ROI calculator Streamlit app: input panel size + condition mix + current performance baseline → output estimated value from AI interventions across 3 scenarios (conservative/moderate/aggressive). Package it cleanly — it can live in your portfolio and be used in real sales conversations.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.ncqa.org/hedis/" target="_blank">📄 NCQA HEDIS Measures</a><a class="resource-link free" href="https://docs.streamlit.io/" target="_blank">📄 Streamlit Docs</a></div></div></div>
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">35</div><div class="week-title-wrap"><span class="week-title">Regulatory Literacy — FDA SaMD &amp; CMS AI Rules</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">FDA: read the 'AI/ML-Based SaMD Action Plan' summary. Understand the tiered risk framework.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">FDA: understand the key distinction between regulated SaMD vs CDS tools exempt from regulation.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">CMS 2024 prior auth rule: what AI/ML disclosure requirements does it impose on payers?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Draft a decision tree: 'When does your healthcare AI need FDA clearance?' One page, visual format.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Apply it: which of YOUR 3 portfolio projects would be classified as SaMD? Which as exempt CDS?</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Regulatory profile exercise: for each of your 3 portfolio projects write a 1-page profile: (1) SaMD or CDS exempt? (2) HIPAA BAA requirements? (3) What would need to change for enterprise deployment at a regulated payer? (4) What's the regulatory risk? This shows enterprise AI maturity.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.fda.gov/media/145022/download" target="_blank">📄 FDA AI/ML SaMD Action Plan</a><a class="resource-link free" href="https://www.fda.gov/regulatory-information/search-fda-guidance-documents/clinical-decision-support-software" target="_blank">📄 FDA CDS Guidance</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">36</div><div class="week-title-wrap"><span class="week-title">ONC HTI-1 + HIPAA in AI Context <span class="milestone-badge">⭐ Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">ONC HTI-1: read the summary. Understand the predictive DSI transparency requirements for algorithms.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">HIPAA + AI: when does sending data to an LLM API create a Business Associate Agreement requirement?</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Anthropic and Google BAAs: what do they actually cover? What are developer responsibilities?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Build a compliance checklist for healthcare AI deployments: reusable across any future project.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">MILESTONE: Can you now speak fluently to FDA, CMS, ONC rules in a client or board conversation? Practice out loud.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Write the Compliance &amp; Governance section of your PHM Engine system design document. It should be clear enough for a compliance officer to review. Cover: data handling, PHI de-identification, model transparency, audit logging, regulatory classification, and BAA requirements.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://www.healthit.gov/topic/laws-regulation-and-policy/health-data-technology-and-interoperability-rule" target="_blank">📄 ONC HTI-1 Rule</a><a class="resource-link free" href="https://www.hhs.gov/hipaa/for-professionals/special-topics/cloud-computing/index.html" target="_blank">📄 HHS HIPAA Cloud Guidance</a></div></div></div>
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">37</div><div class="week-title-wrap"><span class="week-title">BUILD — PHM Engine System Design (Part 1)</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Define scope: what does the AI-powered PHM engine do? Users, inputs, outputs, constraints.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Architecture layer 1: Data ingestion — claims, FHIR, ADT feeds, lab results. Draw the data flow.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Architecture layer 2: AI processing — which AI components run on which data at which stage?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Architecture layer 3: Agent orchestration — which agents, which MCP servers, how do they coordinate?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Architecture layer 4: Output interfaces — what does each user type (care manager, physician, payer analyst) see?</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Draft the full architecture diagram in draw.io or Lucidchart: data ingestion, GCP services, AI components (LLMs, NLP, risk models), agent orchestration, MCP servers, output interfaces, and compliance layer. Spend the full 4 hours on it. This is the centrepiece of your portfolio.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/architecture/framework" target="_blank">📄 GCP Architecture Framework</a><a class="resource-link free" href="https://app.diagrams.net/" target="_blank">🔧 draw.io (free)</a><a class="resource-link free" href="https://www.lucidchart.com/" target="_blank">🔧 Lucidchart (free tier)</a></div></div></div>
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">38</div><div class="week-title-wrap"><span class="week-title">BUILD — PHM Engine System Design (Part 2)</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Write Disease Program sections: Diabetes, CHF, Hypertension, CKD — what does AI do specifically in each?</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Write Data Model section: key entities, relationships, how the model enables AI features.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Write Agent Architecture section: each agent, its tools/MCP servers, how they coordinate.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Write Integration Architecture: FHIR APIs, HL7 feeds, payer portals, EMR system connections.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Write AI Model Inventory: every AI component, its purpose, inputs, outputs, evaluation approach.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Write the ROI &amp; Business Case section: using your Week 34 Streamlit calculator, model expected value for a payer with 100,000 attributed lives across 5 disease programs. Include cost to build and operate vs expected value capture. Make it CFO-readable — one table, three scenarios, clear assumptions.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://cloud.google.com/architecture" target="_blank">📄 GCP Reference Architectures</a></div></div></div>
+
+    <div class="week-card" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">39</div><div class="week-title-wrap"><span class="week-title">BUILD — PHM Engine System Design (Part 3)</span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">Write Implementation Roadmap: phased delivery plan. Use your actual charter experience — this is your unfair advantage.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">Write Risk &amp; Mitigation: technical, regulatory, and clinical adoption risks — and specific mitigations.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Write Evaluation &amp; Continuous Improvement: how does the system get measurably better over time?</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Write Executive Summary: 1 page. A VP should get the full picture in 5 minutes. Write it last, not first.</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">Share with 1–2 trusted colleagues for feedback. Incorporate at least 3 specific improvements.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Convert the system design into a 12-slide presentation deck. Rehearse presenting it out loud — can you deliver it clearly in 15 minutes? This is your job interview presentation, your client pitch, and your conference talk all in one artifact.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://aws.amazon.com/architecture/well-architected/" target="_blank">📄 AWS Well-Architected (reference)</a></div></div></div>
+
+    <div class="week-card milestone" data-phase="5"><button class="week-header" onclick="toggleWeek(this)"><div class="week-num">40</div><div class="week-title-wrap"><span class="week-title">Portfolio Review + Career Positioning <span class="milestone-badge">⭐ Final Milestone</span></span></div><span class="week-toggle">+</span></button><div class="week-body"><div class="section-label">📅 Weekday Plan — 30 min each</div><div class="daily-row"><span class="day-tag">Mon</span><span class="day-task">GitHub portfolio audit: all 3 projects + PHM system design. Clean, documented, professional presentation.</span></div><div class="daily-row"><span class="day-tag">Tue</span><span class="day-task">LinkedIn: rewrite your headline and About section to reflect Healthcare AI Engineer positioning.</span></div><div class="daily-row"><span class="day-tag">Wed</span><span class="day-task">Resume update: add specific AI projects, technologies, and measurable outcomes from this roadmap.</span></div><div class="daily-row"><span class="day-tag">Thu</span><span class="day-task">Target 10 specific roles at companies you want. Gap analysis: what does each JD require that you still need?</span></div><div class="daily-row"><span class="day-tag">Fri</span><span class="day-task">FINAL MILESTONE: You are a Healthcare AI Engineer. Document what you'll focus on in the next phase.</span></div><div class="section-label">🏗️ Weekend Build — 4 hours</div><div class="weekend-box">Write your personal brand statement: 1 paragraph explaining who you are at the intersection of healthcare domain expertise and AI engineering. Then share your PHM Engine system design as a LinkedIn long-form post. The healthcare AI community is small, highly networked, and responds strongly to practitioners who share real architectural thinking.</div><div class="section-label">📚 Resources</div><div class="resources-wrap"><a class="resource-link free" href="https://substack.com/" target="_blank">🔧 Substack (technical blog)</a></div></div></div>
+
+  </div>
+  <div class="phase-nav">
+    <button class="phase-nav-btn" onclick="switchPhase(4)">← Previous Phase</button>
+    <span class="phase-nav-info">Phase 5 of 5</span>
+    <button class="phase-nav-btn" disabled>Next Phase →</button>
+  </div>
+</div>
+
+<div class="doc-footer">
+  <div>
+    <h3>Healthcare AI Engineer Roadmap</h3>
+    <p>Personal learning plan for Manoj Potharlanka · April 2026</p>
+  </div>
+  <div class="footer-meta">
+    <div class="footer-meta-item"><label>Weeks</label><span>40</span></div>
+    <div class="footer-meta-item"><label>Projects</label><span>4</span></div>
+    <div class="footer-meta-item"><label>Weekly hrs</label><span>~6.5</span></div>
+    <div class="footer-meta-item"><label>Version</label><span>1.0</span></div>
+  </div>
+</div>
+
+<script>
+function switchPhase(n) {
+  document.querySelectorAll('.phase-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('phase' + n).classList.add('active');
+  document.querySelector('.phase-tab[data-phase="' + n + '"]').classList.add('active');
+  document.getElementById('phaseTabs').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function toggleWeek(btn) {
+  const body = btn.nextElementSibling;
+  const toggle = btn.querySelector('.week-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  toggle.textContent = isOpen ? '+' : '−';
+}
+</script>
+</body>
+</html>
