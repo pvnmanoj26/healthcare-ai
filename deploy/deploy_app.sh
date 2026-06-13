@@ -32,7 +32,7 @@ gcloud beta run deploy ${SERVICE_NAME} \
   --timeout 300 \
   --concurrency 10 \
   --set-secrets="ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,UPSTASH_VECTOR_REST_URL=UPSTASH_VECTOR_REST_URL:latest,UPSTASH_VECTOR_REST_TOKEN=UPSTASH_VECTOR_REST_TOKEN:latest,FLASK_SECRET_KEY=FLASK_SECRET_KEY:latest" \
-  --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BIGQUERY_DATASET=healthcare_ai,CLINICAL_API_BASE_URL=https://clinical-ai-api-230808425514.us-central1.run.app" \
+  --set-env-vars="GCP_PROJECT_ID=${PROJECT_ID},BIGQUERY_DATASET=healthcare_ai,CLINICAL_API_BASE_URL=https://clinical-ai-api-6m3wb4nb7a-uc.a.run.app" \
   --project=${PROJECT_ID}
 
 echo "✅ App deployment complete!"

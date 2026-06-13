@@ -19,4 +19,4 @@ COPY . .
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["python", "api/main.py"]
+CMD ["python", "-m", "api.main"]
